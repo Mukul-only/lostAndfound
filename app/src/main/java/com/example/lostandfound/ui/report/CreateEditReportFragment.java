@@ -643,6 +643,28 @@ public class CreateEditReportFragment extends Fragment {
         binding.btnSubmitReport.setOnClickListener(v -> handleSubmit());
     }
 
+    /**
+     * Vertical offset of {@code target} inside the scroll content.
+     *
+     * <p>{@link View#getTop()} is relative to the immediate parent, but the
+     * scroll target passed to {@code ScrollView.scrollTo} is relative to the
+     * scroll content. Fields sit inside a wrapper (the date/time pair shares
+     * one), so summing {@code getTop()} up to the ScrollView is what puts the
+     * two coordinate spaces in agreement.
+     */
+    private int offsetInScrollContent(View target) {
+        int offset = 0;
+        View current = target;
+        while (current != null && current != binding.scrollCreateReport) {
+            offset += current.getTop();
+            if (!(current.getParent() instanceof View)) {
+                break;
+            }
+            current = (View) current.getParent();
+        }
+        return offset;
+    }
+
     private void handleSubmit() {
         binding.tvCreateError.setVisibility(View.GONE);
 
@@ -762,9 +784,13 @@ public class CreateEditReportFragment extends Fragment {
             final View focusTarget = firstInvalidView;
             binding.scrollCreateReport.post(() -> {
                 // Offset upward so the header band does not cover the invalid field
-                int target = Math.max(0, focusTarget.getTop() - (int) (48 * getResources().getDisplayMetrics().density));
+                int target = Math.max(0, offsetInScrollContent(focusTarget) - (int) (48 * getResources().getDisplayMetrics().density));
                 binding.scrollCreateReport.smoothScrollTo(0, target);
-                focusTarget.requestFocus();
+                // A TextInputLayout is not focusable itself, so focusing it left
+                // the field off-screen. Focus the inner input so the framework's
+                // own scroll-into-view keeps it visible once the keyboard opens.
+                View input = focusTarget.findViewById(android.R.id.edit);
+                (input != null ? input : focusTarget).requestFocus();
             });
             return;
         }
