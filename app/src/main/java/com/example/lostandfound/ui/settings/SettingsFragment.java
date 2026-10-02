@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,8 @@ import com.example.lostandfound.ui.common.PhotoSourcePicker;
 import com.example.lostandfound.util.ProfileUtils;
 
 public class SettingsFragment extends Fragment {
+
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private static final String CAPTURE_DIR = "captures/avatar";
 
     private FragmentSettingsBinding binding;
@@ -135,13 +139,27 @@ public class SettingsFragment extends Fragment {
 
         bindRow(binding.rowClearCache, R.drawable.ic_photo,
                 R.string.settings_clear_cache, R.string.settings_clear_cache_description,
-                v -> {
-                    Glide.get(requireContext()).clearDiskCache();
-                    Toast.makeText(requireContext(), R.string.settings_clear_cache_done,
-                            Toast.LENGTH_SHORT).show();
-                });
+                v -> clearImageCache());
 
         binding.btnSignOut.setOnClickListener(v -> confirmSignOut());
+    }
+
+    private void clearImageCache() {
+        Context context = requireContext().getApplicationContext();
+        // Glide.clearDiskCache() deletes files synchronously and asserts it is
+        // called off the main thread, so running it from the click listener
+        // threw IllegalArgumentException and took the process down.
+        new Thread(() -> {
+            Glide.get(context).clearDiskCache();
+            mainHandler.post(() -> {
+                // In-memory cache is main-thread only.
+                Glide.get(context).clearMemory();
+                if (isAdded()) {
+                    Toast.makeText(requireContext(), R.string.settings_clear_cache_done,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        }).start();
     }
 
     /** Populates one included settings row, then wires its tap target. */
