@@ -131,6 +131,35 @@ public class DateUtils {
     }
 
     /**
+     * True when the incident date (yyyy-MM-dd) plus time (HH:mm) fall after the
+     * current moment, i.e. the report would claim to have happened in the
+     * future.
+     *
+     * <p>Both parts are needed: the date picker already forbids future dates, so
+     * in practice only "today + a later time" can be future. Checking the pair
+     * rather than the time alone still catches a future date restored from saved
+     * state.
+     *
+     * <p>Unparseable input returns false, so a formatting quirk never blocks an
+     * otherwise valid report.
+     */
+    public static boolean isFutureDateTime(String isoDate, String timeHHmm) {
+        Date day = parseDateOnly(isoDate);
+        if (day == null) return false;
+
+        Matcher matcher = HH_MM_PATTERN.matcher(timeHHmm == null ? "" : timeHHmm.trim());
+        if (!matcher.matches()) return false;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(day);
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(matcher.group(1)));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(matcher.group(2)));
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime().after(new Date());
+    }
+
+    /**
      * Parses a plain yyyy-MM-dd string keeping the calendar date as-is (device
      * timezone), so display never shifts the date by a day. Returns null on failure.
      */

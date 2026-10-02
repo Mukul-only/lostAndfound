@@ -701,6 +701,13 @@ public class CreateEditReportFragment extends Fragment {
             if (firstInvalidView == null) {
                 firstInvalidView = binding.tilReportTime;
             }
+        } else if (DateUtils.isFutureDateTime(selectedIncidentDate, storedIncidentTime)) {
+            // A lost item cannot have been lost later today, and the date picker
+            // already blocks future dates, so the time is the field at fault.
+            binding.tilReportTime.setError("Incident time cannot be in the future.");
+            if (firstInvalidView == null) {
+                firstInvalidView = binding.tilReportTime;
+            }
         } else {
             binding.tilReportTime.setError(null);
         }
