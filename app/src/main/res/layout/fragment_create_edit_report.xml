@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Create/Edit Report — minimalist Home-matched form: slim heading, obvious
+     LOST/FOUND selector, hairline-separated groups (details / photo /
+     when & where / verification), no outer card. Navigation stays with
+     MainActivity; the bottom padding keeps submit clear of its bar. -->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/spotify_bg">
+
+    <ScrollView
+        android:id="@+id/scrollCreateReport"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="128dp">
+
+            <!-- Compact heading -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvCreateHeaderTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Create Report"
+                        android:textColor="@color/spotify_text"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
+
+                    <TextView
+                        android:id="@+id/tvCreateHeaderSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Clear details help items find their way home."
+                        android:textColor="@color/spotify_text2"
+                        android:textSize="13sp"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- LOST/FOUND selector -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="What happened?"
+                android:textColor="@color/spotify_text"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/bg_segmented_container"
+                android:padding="4dp"
+                app:singleSelection="true"
+                app:selectionRequired="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnToggleLost"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="I lost an item"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    app:icon="@drawable/ic_luggage"
+                    app:iconGravity="textStart"
+                    app:iconSize="18dp"
+                    app:iconPadding="8dp"
+                    app:iconTint="@color/spotify_text2"
+                    app:strokeWidth="1dp"
+                    app:backgroundTint="@color/spotify_surface"
+                    app:strokeColor="@color/spotify_border"
+                    app:cornerRadius="10dp"
+                    android:textColor="@color/spotify_text2"
+                    style="@style/Widget.App.Button.Outlined" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnToggleFound"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="I found an item"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="14dp"
+                    app:icon="@drawable/ic_briefcase"
+                    app:iconGravity="textStart"
+                    app:iconSize="18dp"
+                    app:iconPadding="8dp"
+                    app:iconTint="@color/spotify_text2"
+                    app:strokeWidth="1dp"
+                    app:backgroundTint="@color/spotify_surface"
+                    app:strokeColor="@color/spotify_border"
+                    app:cornerRadius="10dp"
+                    android:textColor="@color/spotify_text2"
+                    style="@style/Widget.App.Button.Outlined" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Fields marked * are required."
+                android:textColor="@color/spotify_text2"
+                android:textSize="12sp" />
+
+            <!-- ============ Group: Item details ============ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"
+                android:text="Item details"
+                android:textColor="@color/spotify_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilReportTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="Item title *"
+                app:helperText="e.g. Blue Hydro Flask, Sony headphones"
+                app:helperTextTextColor="@color/spotify_text2"
+                app:errorEnabled="true"
+                style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+                <com.example.lostandfound.ui.components.FounditTextInputEditText
+                    android:id="@+id/etReportTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:maxLines="1"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/spotify_text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilReportCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="Category *"
+                app:endIconMode="dropdown_menu"
+                app:errorEnabled="true"
+                style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/actvReportCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+            android:popupBackground="@drawable/bg_dropdown_popup"
+            app:dropDownBackgroundTint="@color/spotify_surface"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/spotify_text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilReportDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:hint="Public description *"
+                app:helperText="Include color, brand, and any distinctive marks."
+                app:helperTextTextColor="@color/spotify_text2"
+                app:errorEnabled="true"
+                style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+                <com.example.lostandfound.ui.components.FounditTextInputEditText
+                    android:id="@+id/etReportDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minLines="3"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/spotify_text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/spotify_border"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="4dp" />
+
+            <!-- ============ Group: Photo (optional) ============ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Photo (optional)"
+                android:textColor="@color/spotify_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="12dp"
+                android:text="A clear photo speeds up recognition."
+                android:textColor="@color/spotify_text2"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginEnd="12dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/spotify_border"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="@color/spotify_surface2">
+
+                    <ImageView
+                        android:id="@+id/ivPhotoPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_photo"
+                        android:contentDescription="Photo preview" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPickPhoto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select photo"
+                        android:textAllCaps="false"
+                        app:icon="@drawable/ic_photo"
+                        style="@style/Widget.Foundit.Spotify.OutlinedButton" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRemovePhoto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Remove photo"
+                        android:textAllCaps="false"
+                        android:visibility="gone"
+                        style="@style/Widget.Foundit.Spotify.DangerOutline" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Privacy warning alert -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="top"
+                android:background="@drawable/bg_form_note"
+                android:padding="10dp"
+                android:layout_marginBottom="4dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="1dp"
+                    android:src="@drawable/ic_report_problem"
+                    app:tint="@color/spotify_text2"
+                    android:contentDescription="Warning" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Photos are publicly visible on campus. Avoid photographing student ID numbers, addresses, or secret identifying marks."
+                    android:textColor="@color/spotify_text2"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/spotify_border"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="4dp" />
+
+            <!-- ============ Group: When & where ============ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"
+                android:text="When &amp; where"
+                android:textColor="@color/spotify_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilReportDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:hint="Date *"
+                    app:startIconDrawable="@drawable/ic_calendar"
+                    app:startIconTint="@color/spotify_text2"
+                    app:errorEnabled="true"
+                    style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+                    <com.example.lostandfound.ui.components.FounditTextInputEditText
+                        android:id="@+id/etReportDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:cursorVisible="false"
+                        android:inputType="none"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textSize="15sp"
+                        android:textColor="@color/spotify_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilReportTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:hint="Approx. time *"
+                    app:startIconDrawable="@drawable/ic_clock"
+                    app:startIconTint="@color/spotify_text2"
+                    app:errorEnabled="true"
+                    style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+                    <com.example.lostandfound.ui.components.FounditTextInputEditText
+                        android:id="@+id/etReportTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:cursorVisible="false"
+                        android:inputType="none"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textSize="15sp"
+                        android:textColor="@color/spotify_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilReportLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:hint="Approximate campus location *"
+                app:endIconMode="dropdown_menu"
+                app:errorEnabled="true"
+                style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/actvReportLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+            android:popupBackground="@drawable/bg_dropdown_popup"
+            app:dropDownBackgroundTint="@color/spotify_surface"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/spotify_text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Map pin (both LOST and FOUND) -->
+            <LinearLayout
+                android:id="@+id/layoutMapPinPicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tvMapPinLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Last seen location (optional map pin)"
+                    android:textColor="@color/spotify_text2"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="2dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="6dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSetMapPin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pin on map"
+                        android:textAllCaps="false"
+                        app:icon="@drawable/ic_location"
+                        style="@style/Widget.Foundit.Spotify.OutlinedButton" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRemoveMapPin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Remove"
+                        android:textAllCaps="false"
+                        android:layout_marginStart="8dp"
+                        android:visibility="gone"
+                        style="@style/Widget.Foundit.Spotify.DangerOutline" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvPinCoordinatesStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No pin set (approximate location from dropdown used)"
+                    android:textColor="@color/spotify_text2"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- ============ Group: FOUND ownership verification ============ -->
+            <LinearLayout
+                android:id="@+id/layoutFoundSpecifics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/spotify_border"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Verification"
+                    android:textColor="@color/spotify_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Verification fields. The explanatory info alert that used to sit here was
+                     removed: the hints on the two fields already say which one is
+                     public and which stays private. -->
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilPublicQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="Public verification question *"
+                    app:helperText="Shown with your report. e.g. What keychain is attached?"
+                    app:helperTextTextColor="@color/spotify_text2"
+                    app:errorEnabled="true"
+                    style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+                    <com.example.lostandfound.ui.components.FounditTextInputEditText
+                        android:id="@+id/etPublicQuestion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textSize="15sp"
+                        android:textColor="@color/spotify_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilFinderPrivateNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:hint="Secret identifying detail *"
+                    app:helperText="Never public — only you can see it. e.g. 'Engraved initials AF on bottom corner'."
+                    app:helperTextTextColor="@color/spotify_text2"
+                    app:errorEnabled="true"
+                    style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+                    <com.example.lostandfound.ui.components.FounditTextInputEditText
+                        android:id="@+id/etFinderPrivateNotes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textSize="15sp"
+                        android:textColor="@color/spotify_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!-- Error notice -->
+            <TextView
+                android:id="@+id/tvCreateError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_alert_warning"
+                android:padding="10dp"
+                android:textColor="@color/spotify_error"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <!-- Submit -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubmitReport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="52dp"
+                android:layout_marginTop="20dp"
+                android:text="Publish Report"
+                android:textAllCaps="true"
+                android:letterSpacing="0.08"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                style="@style/Widget.Foundit.Spotify.GreenPill" />
+
+            <ProgressBar
+                android:id="@+id/progressCreateReport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:indeterminateTint="@color/spotify_green"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

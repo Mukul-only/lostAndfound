@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared spacing scale: layouts reference these instead of hardcoded gaps. -->
+    <dimen name="spacing_xxs">2dp</dimen>
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">12dp</dimen>
+    <dimen name="spacing_lg">16dp</dimen>
+    <dimen name="spacing_xl">20dp</dimen>
+    <dimen name="spacing_xxl">24dp</dimen>
+
+    <!-- Home (Cal-inspired): 8dp controls, 12-16dp containers, >=48dp targets. -->
+    <dimen name="home_gutter">16dp</dimen>
+    <dimen name="home_search_min_height">52dp</dimen>
+    <dimen name="home_action_min_height">52dp</dimen>
+    <dimen name="home_avatar_size">48dp</dimen>
+    <dimen name="home_card_radius">12dp</dimen>
+
+    <!-- Quick-category tiles -->
+    <dimen name="category_tile_width">88dp</dimen>
+    <dimen name="category_icon_container_size">56dp</dimen>
+    <dimen name="category_icon_size">32dp</dimen>
+
+    <!-- Bottom navigation geometry lives in Widget.App.BottomNavigation
+         (itemPaddingTop/Bottom, itemIconSize) — NOT in the Material library
+         design_bottom_navigation_margin / label_padding dimens. Those only
+         seed defaults that the style attrs override, so overriding them here
+         was a no-op and has been removed to avoid false confidence. -->
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_lost"
+        android:title="@string/fab_lost"
+        android:icon="@drawable/ic_report_problem" />
+    <item
+        android:id="@+id/menu_found"
+        android:title="@string/fab_found"
+        android:icon="@drawable/ic_add" />
+</menu>

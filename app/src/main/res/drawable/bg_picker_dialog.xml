@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Picker dialog frame: dark surface with side margins and rounded corners.
+     A flat windowBackground color paints edge-to-edge (full-width stretch);
+     the inset keeps the dialog visually narrow and centered while the window
+     manager still centers the floating window. No fixed heights, no
+     internal view IDs. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="24dp"
+    android:insetRight="24dp">
+    <shape android:shape="rectangle">
+        <corners android:radius="20dp" />
+        <solid android:color="@color/spotify_surface" />
+    </shape>
+</inset>

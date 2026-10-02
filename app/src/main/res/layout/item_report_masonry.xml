@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Masonry tile: photo fills the tile; title floats over it in a
+     translucent pill. No white strip, border, or shadow. -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@android:color/transparent"
+    android:clickable="true"
+    android:focusable="true">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Full tile size; height wraps the fitted image. maxHeight caps
+             extremely tall uploads so one tile never dominates the feed. -->
+        <ImageView
+            android:id="@+id/ivMasonryImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:minHeight="140dp"
+            android:maxHeight="300dp"
+            android:background="@color/spotify_surface2"
+            android:src="@drawable/ic_photo"
+            android:contentDescription="@string/content_description_photo" />
+
+<TextView
+                android:id="@+id/tvMasonryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="8dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:text="Item Title"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:lineSpacingExtra="1dp"
+                android:background="@drawable/bg_title_scrim" />
+
+          <!-- Status sits opposite the title so the grid view tells you which
+               items are still open. Same pill as the list card and the claim
+               card, so the two sections read as one system. -->
+          <TextView
+              android:id="@+id/tvMasonryStatus"
+              android:layout_width="wrap_content"
+              android:layout_height="22dp"
+              android:layout_gravity="top|end"
+              android:layout_margin="8dp"
+              android:gravity="center"
+              android:paddingStart="10dp"
+              android:paddingEnd="10dp"
+              android:text="Open"
+              android:textSize="10sp"
+              android:textStyle="bold"
+              android:letterSpacing="0.08"
+              android:maxLines="1"
+              android:background="@drawable/bg_spotify_status" />
+
+    </FrameLayout>
+</com.google.android.material.card.MaterialCardView>

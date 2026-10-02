@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 1-on-1 chat. The header is compact and carries nothing but identity (back +
+     title): the meeting action lives in the composer where the message is
+     written, and every meeting proposal, outcome and reply quote is an item in
+     the chronological conversation rather than a panel above it. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/spotify_bg">
+
+    <!-- Top Toolbar: identity only. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/spotify_surface"
+        android:paddingStart="8dp"
+        android:paddingEnd="16dp"
+        android:elevation="3dp">
+
+        <ImageButton
+            android:id="@+id/btnChatBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/spotify_text"
+            android:contentDescription="@string/chat_back" />
+
+        <TextView
+            android:id="@+id/tvChatTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="@string/chat_title_default"
+            android:textColor="@color/spotify_text"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+    <!-- Conversation -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMessages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:clipToPadding="false"
+            android:scrollbars="vertical" />
+
+        <!-- Loading / empty state. The first successful poll replaces it, so it
+             doubles as the "still loading" and "nothing here yet" surface. -->
+        <TextView
+            android:id="@+id/tvChatEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:gravity="center"
+            android:text="@string/chat_loading"
+            android:textColor="@color/spotify_text2"
+            android:textSize="14sp"
+            android:accessibilityLiveRegion="polite" />
+
+        <!-- New messages indicator -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNewMessages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:text="NEW MESSAGES"
+            android:textSize="14sp"
+            android:letterSpacing="0.1"
+            android:textAllCaps="true"
+            app:cornerRadius="500dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:visibility="gone"
+            app:backgroundTint="@color/spotify_surface"
+            android:textColor="@color/spotify_text" />
+    </FrameLayout>
+
+    <!-- Composer. The map action sits inside the input pill so proposing a
+         handover location is part of writing the message, not a separate mode. -->
+    <LinearLayout
+        android:id="@+id/layoutComposer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/spotify_surface"
+        android:paddingStart="12dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <!-- Reply target: floats directly above the input as its own block, with a
+             gap so it never reads as part of the field. Dismissible, and restored
+             across recreation along with the unsent text. -->
+        <LinearLayout
+            android:id="@+id/layoutReplyPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_chat_quote"
+            android:layout_marginBottom="6dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:visibility="gone"
+            android:accessibilityLiveRegion="polite">
+
+            <include
+                android:id="@+id/replyPreview"
+                layout="@layout/view_chat_quote"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/btnCancelReply"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_close"
+                app:tint="@color/spotify_text2"
+                android:contentDescription="@string/chat_cancel_reply" />
+        </LinearLayout>
+
+        <!-- One line for every transient state the composer can be in: sending,
+             send failed (with the text kept for retry), a rejected proposal, and
+             a proposal someone else already answered. -->
+        <TextView
+            android:id="@+id/tvComposerStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:textSize="12sp"
+            android:textColor="@color/spotify_text2"
+            android:visibility="gone"
+            android:accessibilityLiveRegion="polite" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom">
+
+            <!-- The input pill: map action, hairline, then the field. -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:background="@drawable/bg_chat_input"
+                android:paddingStart="2dp"
+                android:paddingEnd="12dp">
+
+                    <ImageButton
+                        android:id="@+id/btnProposeMeeting"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_map"
+                        app:tint="@color/spotify_green"
+                        android:contentDescription="@string/chat_propose_spot_cd"
+                        android:scaleType="centerInside" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="22dp"
+                        android:layout_marginEnd="4dp"
+                        android:background="@color/spotify_border" />
+
+                    <com.example.lostandfound.ui.components.FounditEditText
+                        android:id="@+id/etMessageInput"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minHeight="48dp"
+                        android:maxHeight="112dp"
+                        android:gravity="center_vertical"
+                        android:background="@null"
+                        android:hint="@string/chat_input_hint"
+                        android:textColorHint="@color/spotify_text2"
+                        android:textColor="@color/spotify_text"
+                        android:textSize="15sp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:maxLines="4"
+                        android:scrollbars="vertical"
+                        android:inputType="textMultiLine|textCapSentences" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btnSendMessage"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_send"
+                app:tint="@color/spotify_green"
+                android:contentDescription="@string/chat_send" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

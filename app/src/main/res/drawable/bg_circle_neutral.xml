@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Neutral separator dot: uses the standard secondary text token rather
+     than the functional green, which is reserved for active states. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/spotify_text2" />
+</shape>

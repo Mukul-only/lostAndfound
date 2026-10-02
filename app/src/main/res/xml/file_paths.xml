@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Narrowly scoped to the camera-capture cache only. Nothing here exposes
+     user documents, downloads, or the photos already uploaded to Supabase.
+     Each feature writes into its own subdirectory of captures/. -->
+<paths>
+    <cache-path
+        name="photo_captures"
+        path="captures/" />
+</paths>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Safety-report sheet (opened from the report icon on Report Details).
+
+     DESIGN.md Depth level 3 (dialog/overlay) on the #181818 surface with 20dp
+     top radii, matching "Medium (10-20px): Panels, overlay elements".
+     The sheet's own background is painted in ReportAbuseDialog, because
+     BottomSheetDialog tints this view with the theme's android:background,
+     which resolves to white under this app's Light parent theme.
+
+     Type: 18sp semibold title, 14sp body, uppercase caption labels with wide
+     tracking, 14sp uppercase button. All measured against #181818/#1F1F1F:
+       title  #F3727F on #181818  6.4:1      caption #B3B3B3  8.5:1
+       input  #FFFFFF on #1F1F1F  16.5:1     hint    #B3B3B3  7.9:1
+       error  #F3727F on #1F1F1F  5.9:1      button  #FFFFFF on #DC2626  4.8:1 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="24dp"
+    android:background="@drawable/bg_bottom_sheet">
+
+    <!-- Sheet grab handle: signals drag-to-dismiss, decoration-free. -->
+    <View
+        android:layout_width="36dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/bg_sheet_handle" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/abuse_dialog_title"
+        android:textColor="@color/spotify_error"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/abuse_dialog_subtitle"
+        android:textColor="@color/spotify_text2"
+        android:textSize="14sp"
+        android:lineSpacingExtra="2dp" />
+
+    <!-- Reason. Identical construction to the Category and Location dropdowns on
+         the create/edit report screen: a MaterialAutoCompleteTextView inside a
+         TextInputLayout. The option popup surface is applied in code by
+         DropdownStyling, since Material overrides android:popupBackground. -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilAbuseReason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:hint="@string/abuse_reason_hint"
+        app:endIconMode="dropdown_menu"
+        app:errorEnabled="true"
+        style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/inputAbuseReason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:popupBackground="@drawable/bg_dropdown_popup"
+            app:dropDownBackgroundTint="@color/spotify_surface"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="15sp"
+            android:textColor="@color/spotify_text"
+            android:importantForAutofill="no" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilAbuseDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:hint="@string/abuse_details_hint"
+        app:errorEnabled="true"
+        style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+        <com.example.lostandfound.ui.components.FounditTextInputEditText
+            android:id="@+id/etAbuseDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minLines="3"
+            android:maxLength="500"
+            android:gravity="top|start"
+            android:textColor="@color/spotify_text"
+            android:textSize="15sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Validation is a distinct red voice on its own alert surface, so it is
+         not signalled by colour alone. -->
+    <TextView
+        android:id="@+id/tvAbuseError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:textColor="@color/spotify_error"
+        android:textSize="14sp"
+        android:lineSpacingExtra="2dp"
+        android:background="@drawable/bg_alert_warning"
+        android:visibility="gone"
+        android:accessibilityLiveRegion="polite" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSubmitAbuseReport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/abuse_submit"
+        android:textAllCaps="true"
+        android:letterSpacing="0.08"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        style="@style/Widget.Foundit.Spotify.DangerFill" />
+
+    <ProgressBar
+        android:id="@+id/progressAbuseReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:indeterminateTint="@color/spotify_green"
+        android:visibility="gone" />
+
+</LinearLayout>

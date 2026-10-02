@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/transparent"
+    android:padding="8dp">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLostSomething"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="56dp"
+        android:minWidth="200dp"
+        android:text="@string/fab_lost"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:icon="@drawable/ic_face_lost"
+        app:iconGravity="textStart"
+        app:iconSize="22dp"
+        app:iconPadding="10dp"
+        app:cornerRadius="8dp"
+        style="@style/Widget.App.Button.PopupLost" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFoundSomething"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="56dp"
+        android:layout_marginTop="8dp"
+        android:minWidth="200dp"
+        android:text="@string/fab_found"
+        android:textAllCaps="false"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:icon="@drawable/ic_face_found"
+        app:iconGravity="textStart"
+        app:iconSize="22dp"
+        app:iconPadding="10dp"
+        app:cornerRadius="8dp"
+        style="@style/Widget.App.Button.PopupFound" />
+
+</LinearLayout>

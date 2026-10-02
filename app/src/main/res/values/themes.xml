@@ -1,0 +1,610 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.LostAndFound" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- FOUNDIT Brand Primary -->
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorOnPrimary">@color/brand_on_primary</item>
+        <item name="colorPrimaryContainer">@color/brand_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/brand_on_primary_container</item>
+
+        <!-- Secondary -->
+        <item name="colorSecondary">@color/brand_secondary</item>
+        <item name="colorOnSecondary">@color/brand_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/brand_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/brand_on_secondary_container</item>
+
+        <!-- Tertiary -->
+        <item name="colorTertiary">@color/brand_tertiary</item>
+        <item name="colorOnTertiary">@color/brand_on_tertiary</item>
+        <item name="colorTertiaryContainer">@color/brand_tertiary_container</item>
+        <item name="colorOnTertiaryContainer">@color/brand_on_tertiary_container</item>
+
+        <!-- Error -->
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/on_error</item>
+        <item name="colorErrorContainer">@color/error_container</item>
+        <item name="colorOnErrorContainer">@color/on_error_container</item>
+
+<!-- Surfaces -->
+            <item name="android:colorBackground">@color/background</item>
+            <!-- The window paints whatever app content does not cover. That is
+                 most visible as the strip behind the keyboard: adjustResize does
+                 not reliably shrink the window over the IME, so whatever the
+                 window background is shows through there. The Light parent's
+                 default is white, which flashes white behind the keyboard on an
+                 app that is dark-only (MODE_NIGHT_NO). Pinned to the base shade
+                 so the keyboard always rises over near-black. -->
+            <item name="android:windowBackground">@color/spotify_bg</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorSurfaceContainer">@color/surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/surface_container_high</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant</item>
+        <item name="colorOutline">@color/outline</item>
+        <item name="colorOutlineVariant">@color/outline_variant</item>
+
+        <!-- Text / control colors -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:editTextColor">@color/text_primary</item>
+        <item name="colorControlActivated">@color/spotify_green</item>
+        <item name="colorControlHighlight">@color/brand_primary_light</item>
+        <item name="colorControlNormal">@color/input_stroke_default</item>
+        <item name="colorAccent">@color/spotify_green</item>
+        <item name="android:textColorHighlight">@color/spotify_highlight</item>
+        <!-- Default editable-text selection styling app-wide (auth, forms,
+             profile editing, chat/search inputs, dialogs): green caret and
+             handles from shared assets, readable green wash. Explicit
+             per-view attributes still win; errors stay red. -->
+        <item name="android:textCursorDrawable">@drawable/cursor_spotify</item>
+        <item name="android:textSelectHandle">@drawable/handle_spotify_middle</item>
+        <item name="android:textSelectHandleLeft">@drawable/handle_spotify_side</item>
+        <item name="android:textSelectHandleRight">@drawable/handle_spotify_side</item>
+        <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
+        <item name="editTextStyle">@style/Widget.Foundit.Spotify.EditText</item>
+
+        <!-- System bars (DESIGN.md immersion: near-black bars, light icons) -->
+        <item name="android:statusBarColor">@color/spotify_bg</item>
+        <item name="android:navigationBarColor">@color/nav_bar</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+
+        <!-- Shape Appearance - Generous rounded corners for Material 3 Expressive -->
+        <item name="shapeAppearanceCornerSmall">@style/Shape.App.Small</item>
+        <item name="shapeAppearanceCornerMedium">@style/Shape.App.Medium</item>
+        <item name="shapeAppearanceCornerLarge">@style/Shape.App.Large</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/Shape.App.ExtraLarge</item>
+
+        <!-- Button tokens: every button is pill-shaped (28dp) via theme defaults,
+             so layouts never set per-button cornerRadius. -->
+        <item name="materialButtonStyle">@style/Widget.App.Button.Primary</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.App.Button.Outlined</item>
+
+        <!-- Bottom navigation: shrink the labels so a 5-item bar fits on narrow
+             phones without the text being clipped or running past the icon. -->
+        <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigation</item>
+
+        <!-- All alert dialogs follow the dark overlay (green actions). -->
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Foundit.Spotify.Dialog</item>
+        <item name="alertDialogTheme">@style/ThemeOverlay.Foundit.Spotify.Dialog</item>
+    </style>
+
+    <style name="Theme.LostAndFound" parent="Base.Theme.LostAndFound" />
+
+    <!-- Shape Appearances - generous rounding (MaterialComponents parents to match base theme) -->
+    <style name="Shape.App.Small" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="Shape.App.Medium" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="Shape.App.Large" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="Shape.App.ExtraLarge" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">28dp</item>
+    </style>
+
+    <!-- Hero panel shape - rounded bottom corners only -->
+    <style name="Shape.App.Hero" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeBottomLeft">28dp</item>
+        <item name="cornerSizeBottomRight">28dp</item>
+    </style>
+
+    <!-- Pill shape for search field and filters -->
+    <style name="Shape.App.Pill" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">100dp</item>
+    </style>
+
+    <!-- Toolbar / AppBar style -->
+    <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">@color/brand_primary</item>
+        <item name="titleTextColor">@color/text_on_brand</item>
+        <item name="navigationIconTint">@color/text_on_brand</item>
+    </style>
+
+    <!-- Outlined text field with brand focus color.
+         Parent MUST be MaterialComponents to match the base theme; a Material3
+         TextInputLayout parent under a MaterialComponents theme crashes at
+         inflation with "requires a valid TextAppearance attribute". -->
+    <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/input_stroke_state</item>
+        <item name="boxStrokeErrorColor">@color/error</item>
+        <item name="cursorColor">@color/spotify_green</item>
+        <item name="cursorErrorColor">@color/error</item>
+        <item name="hintTextColor">@color/input_hint</item>
+        <item name="android:textColorHint">@color/input_hint</item>
+        <item name="errorTextColor">@color/error</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="endIconTint">@color/brand_primary</item>
+        <item name="boxBackgroundColor">@color/input_bg</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+    </style>
+
+    <!-- Filled text field variant -->
+    <style name="Widget.App.TextInputLayout.Filled" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxStrokeColor">@color/input_stroke_state</item>
+        <item name="hintTextColor">@color/input_hint</item>
+        <item name="android:textColorHint">@color/input_hint</item>
+        <item name="errorTextColor">@color/error</item>
+        <item name="boxBackgroundColor">@color/surface</item>
+    </style>
+
+    <!-- Primary filled button.
+         All app buttons use wrap_content height + a minHeight floor so the label
+         is never clipped when it wraps or the system font scale grows. Never set a
+         fixed android:layout_height on a button. -->
+    <style name="Widget.App.Button.Primary" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/brand_primary</item>
+        <item name="android:textColor">@color/text_on_brand</item>
+        <item name="rippleColor">@color/brand_primary_light</item>
+        <item name="cornerRadius">28dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingHorizontal">24dp</item>
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Secondary button (MaterialComponents has no TonalButton; use UnelevatedButton) -->
+    <style name="Widget.App.Button.Secondary" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="backgroundTint">@color/brand_secondary_container</item>
+        <item name="android:textColor">@color/brand_on_secondary_container</item>
+        <item name="rippleColor">@color/brand_secondary</item>
+        <item name="cornerRadius">28dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingVertical">12dp</item>
+    </style>
+
+    <!-- Outlined button -->
+    <style name="Widget.App.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/brand_primary</item>
+        <item name="android:textColor">@color/brand_primary</item>
+        <item name="rippleColor">@color/brand_primary_light</item>
+        <item name="cornerRadius">28dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingVertical">12dp</item>
+    </style>
+
+    <!-- FOUNDIT Spotify form/dialog controls (DESIGN.md, dark screens).
+         Parents stay MaterialComponents — same inflation behavior as the
+         light styles they replace, so the Auth crash class cannot return. -->
+
+    <!-- Dark outlined text field. -->
+    <style name="Widget.Foundit.Spotify.TextInputLayout" parent="Widget.App.TextInputLayout">
+        <item name="boxBackgroundColor">@color/spotify_surface2</item>
+        <item name="boxStrokeColor">@color/input_stroke_spotify</item>
+        <item name="boxStrokeErrorColor">@color/spotify_error</item>
+        <item name="cursorErrorColor">@color/spotify_error</item>
+        <item name="hintTextColor">@color/spotify_text2</item>
+        <item name="android:textColorHint">@color/spotify_text2</item>
+        <item name="errorTextColor">@color/spotify_error</item>
+        <item name="counterTextColor">@color/spotify_text2</item>
+        <item name="counterOverflowTextColor">@color/spotify_error</item>
+        <item name="endIconTint">@color/spotify_text2</item>
+    </style>
+
+    <!-- Default for EVERY EditText app-wide (auth, forms, profile editing,
+         chat/search inputs, dialog fields): green caret, handles, and
+         selection wash. This is the highest-precedence root mechanism —
+         inline XML and style= still win per-view, but nothing else is needed.
+         OutlinedBox parent keeps TextInputLayout children background-free;
+         plain fields keep their explicit backgrounds. Errors stay red. -->
+    <style name="Widget.Foundit.Spotify.EditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:textCursorDrawable">@drawable/cursor_spotify</item>
+        <item name="android:textSelectHandle">@drawable/handle_spotify_middle</item>
+        <item name="android:textSelectHandleLeft">@drawable/handle_spotify_side</item>
+        <item name="android:textSelectHandleRight">@drawable/handle_spotify_side</item>
+        <item name="android:textColorHighlight">@color/spotify_highlight</item>
+    </style>
+
+
+
+    <!-- Dark framework picker dialogs (Create Report clock + calendar).
+         Passed explicitly at construction, so no other screen is affected.
+         Green owns headers, selection, hands, and actions; text stays
+         white/silver on dark. The inset dialog frame keeps both dialogs
+         narrow with side margins and centered — a flat windowBackground
+         would paint edge-to-edge instead. -->
+    <!-- Date/time picker OK + Cancel. These inherit the dialog's colorAccent,
+         which is the Spotify green, so the label has to be pinned white here or
+         it renders green against the near-black surface. -->
+    <style name="Widget.Foundit.Spotify.PickerDialog.Button" parent="android:Widget.Material.Button.Borderless">
+        <item name="android:textColor">@color/spotify_text</item>
+    </style>
+
+    <style name="ThemeOverlay.Foundit.Spotify.PickerDialog" parent="android:Theme.Material.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/bg_picker_dialog</item>
+        <item name="android:colorBackground">@color/spotify_surface</item>
+        <item name="android:colorPrimary">@color/spotify_green</item>
+        <item name="android:colorAccent">@color/spotify_green</item>
+        <item name="android:colorControlActivated">@color/spotify_green</item>
+        <item name="android:textColorPrimary">@color/spotify_text</item>
+        <item name="android:textColorSecondary">@color/spotify_text2</item>
+        <item name="android:textColorHint">@color/spotify_text2</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/Widget.Foundit.Spotify.PickerDialog.Button</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/Widget.Foundit.Spotify.PickerDialog.Button</item>
+        <item name="android:buttonBarNeutralButtonStyle">@style/Widget.Foundit.Spotify.PickerDialog.Button</item>
+    </style>
+
+    <!-- Secondary outlined button: white text, gray border. -->
+    <style name="Widget.Foundit.Spotify.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/spotify_outline</item>
+        <item name="android:textColor">@color/spotify_text</item>
+        <item name="iconTint">@color/spotify_text</item>
+        <item name="rippleColor">@color/spotify_surface2</item>
+        <item name="cornerRadius">100dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingVertical">12dp</item>
+    </style>
+
+    <!-- Destructive outlined button: red text/border (sign-out, decline). -->
+    <style name="Widget.Foundit.Spotify.DangerOutline" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/spotify_error</item>
+        <item name="android:textColor">@color/spotify_error</item>
+        <item name="iconTint">@color/spotify_error</item>
+        <item name="rippleColor">@color/spotify_surface2</item>
+        <item name="cornerRadius">100dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingVertical">12dp</item>
+    </style>
+
+    <!-- Destructive filled button (safety reports): red fill, white text. -->
+    <style name="Widget.Foundit.Spotify.DangerFill" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/lost_badge</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="iconTint">@color/white</item>
+        <item name="rippleColor">@color/spotify_error</item>
+        <item name="cornerRadius">100dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Quiet text button: white text (toolbar/dismiss actions). -->
+    <style name="Widget.Foundit.Spotify.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/spotify_text</item>
+        <item name="rippleColor">@color/spotify_surface2</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <!-- FAB Style -->
+    <style name="Widget.App.FAB" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/fab_background</item>
+        <item name="tint">@color/fab_on_background</item>
+        <item name="rippleColor">@color/brand_primary_light</item>
+        <item name="shapeAppearance">@style/Shape.App.Large</item>
+        <item name="fabSize">normal</item>
+    </style>
+
+    <!-- Chip Style for Categories -->
+    <style name="Widget.App.Chip.Category" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_state_bg</item>
+        <item name="android:textColor">@color/chip_state_text</item>
+        <item name="strokeColor">@color/chip_stroke</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="chipCornerRadius">20dp</item>
+        <item name="android:paddingHorizontal">16dp</item>
+        <item name="android:paddingVertical">8dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="iconTint">@color/chip_icon_state</item>
+        <item name="checkedIconVisible">false</item>
+    </style>
+
+    <!-- Pill Filter Chip Style -->
+    <style name="Widget.App.Chip.Filter" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">@color/filter_chip_state_bg</item>
+        <item name="android:textColor">@color/filter_chip_state_text</item>
+        <item name="strokeColor">@color/chip_stroke</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="chipCornerRadius">100dp</item>
+        <item name="android:paddingHorizontal">20dp</item>
+        <item name="android:paddingVertical">8dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="checkedIconVisible">false</item>
+    </style>
+
+    <!-- ProgressBar tint -->
+    <style name="Widget.App.ProgressBar" parent="android:Widget.ProgressBar">
+        <item name="android:indeterminateTint">@color/brand_primary</item>
+    </style>
+
+    <!-- Card Style -->
+    <style name="Widget.App.Card" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="strokeColor">@color/card_stroke</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+    </style>
+
+    <!-- Elevated Card for Hero -->
+    <style name="Widget.App.Card.Hero" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">28dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardBackgroundColor">@color/brand_primary</item>
+    </style>
+
+    <!-- Compact label text for the 5-destination bar. 11sp keeps every label
+         (including "My Reports") readable on one line; the library pins
+         labels to one line with end-ellipsis as a last resort and shows
+         scaled text in the long-press tooltip instead of scaling labels. -->
+    <style name="TextAppearance.App.BottomNav" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <!-- Bottom Navigation Style (DESIGN.md mobile bar: near-black #121212,
+         active white / inactive silver, color-only selected state).
+         Item tint MUST use the state_checked list: BottomNavigationView marks
+         the active destination checked, never selected — the state_selected
+         list never matches and the bar would stay gray.
+         Cause of the old icon-top/label-bottom gap: the item layout pins the
+         icon to the top (margin itemPaddingTop) and the labels to the bottom
+         (padding itemPaddingBottom), so ANY bar height beyond content becomes
+         middle gap. Symmetric 8dp outer padding makes the 24dp icon + ~15dp
+         label unit fill the bar exactly (~55dp ≈ 56dp bar → ~1dp gap) and
+         centers it. -->
+    <style name="Widget.App.BottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconTint">@color/bottom_nav_item</item>
+        <item name="itemTextColor">@color/bottom_nav_item</item>
+        <item name="itemIconSize">24dp</item>
+        <item name="itemPaddingTop">8dp</item>
+        <item name="itemPaddingBottom">8dp</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.App.BottomNav</item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.App.BottomNav</item>
+        <item name="itemHorizontalTranslationEnabled">false</item>
+        <item name="itemActiveIndicatorStyle">@style/Widget.App.BottomNav.ActiveIndicator</item>
+    </style>
+
+    <!-- Null-object active indicator: 0dp so the selected state is color-only
+         (near-black vs muted gray) with no pill background or purple tint. -->
+    <style name="Widget.App.BottomNav.ActiveIndicator" parent="">
+        <item name="android:width">0dp</item>
+        <item name="android:height">0dp</item>
+    </style>
+
+    <!-- FOUNDIT Home (Cal-inspired) — reusable tokens, not scattered values.
+         Single black primary action; white canvas; 8dp controls; 12dp cards.
+         Font is system sans (Roboto) as the licensed Cal Sans / Inter
+         substitute; letterSpacing is left at Android defaults. -->
+    <style name="Widget.Foundit.Home.PrimaryButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/home_ink</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="iconTint">@color/white</item>
+        <item name="rippleColor">@color/home_pressed</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:paddingHorizontal">20dp</item>
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.Foundit.Home.SearchCard" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">@color/home_hairline</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cardBackgroundColor">@color/home_canvas</item>
+    </style>
+
+    <style name="Widget.Foundit.Home.FilterChip" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">@color/home_filter_chip_bg</item>
+        <item name="android:textColor">@color/home_filter_chip_text</item>
+        <item name="strokeColor">@color/home_hairline</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="chipCornerRadius">100dp</item>
+        <item name="android:paddingHorizontal">16dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="checkedIconVisible">false</item>
+    </style>
+
+    <style name="TextAppearance.Foundit.Home.HeaderTitle" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/home_ink</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.Foundit.Home.HeaderSubtitle" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/home_muted</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.Foundit.Home.SectionTitle" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/home_ink</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/Widget.App.BottomSheet.Modal</item>
+        <!-- Dark sheet content: every bottom sheet is dark after the redesign. -->
+        <item name="colorSurface">@color/spotify_surface</item>
+        <item name="colorOnSurface">@color/spotify_text</item>
+        <item name="android:textColorPrimary">@color/spotify_text</item>
+        <item name="android:textColorSecondary">@color/spotify_text2</item>
+        <item name="colorPrimary">@color/spotify_green</item>
+    </style>
+
+    <style name="Widget.App.BottomSheet.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearance">@style/Shape.App.Large</item>
+        <item name="android:background">@color/spotify_surface</item>
+    </style>
+
+    <!-- Dark alert dialogs (Browse filters, reject-claim, safety, sign-out).
+         Parent stays MaterialComponents so inflation behavior is unchanged. -->
+    <!-- Safety-report sheet only. Opted into by ReportAbuseDialog.getTheme(), so
+         the Light parent theme's white sheet surface is replaced for that one
+         dialog and no other bottom sheet changes. -->
+    <style name="Widget.Foundit.Spotify.BottomSheet" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="android:background">@color/spotify_surface</item>
+        <item name="backgroundTint">@null</item>
+    </style>
+
+    <!-- NOTE: android:background must stay unset here. A Dialog theme's
+         android:background paints the whole window, which turned the entire
+         display behind the sheet opaque dark. The sheet's own background is
+         handled in ReportAbuseDialog, which also clears the white tint
+         BottomSheetDialog applies from this theme. -->
+    <style name="ThemeOverlay.Foundit.Spotify.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.Foundit.Spotify.BottomSheet</item>
+    </style>
+
+<style name="ThemeOverlay.Foundit.Spotify.Dialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/spotify_surface</item>
+        <item name="colorOnSurface">@color/spotify_text</item>
+        <item name="colorPrimary">@color/spotify_green</item>
+        <item name="android:textColorPrimary">@color/spotify_text</item>
+        <item name="android:textColorSecondary">@color/spotify_text2</item>
+    </style>
+
+    <!-- FOUNDIT Home Spotify redesign (DESIGN.md, scoped to Home only).
+         Pill geometry (100dp), uppercase labels with wide tracking, compact
+         10-20sp type, heavy elevation on dark. System sans substitutes the
+         licensed SpotifyMixUI/CircularSp. Green is functional-only. -->
+    <style name="Widget.Foundit.Spotify.GreenPill" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/spotify_green</item>
+        <item name="android:textColor">@color/spotify_on_green</item>
+        <item name="iconTint">@color/spotify_on_green</item>
+        <item name="rippleColor">@color/spotify_green_border</item>
+        <item name="cornerRadius">100dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingHorizontal">20dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Widget.Foundit.Spotify.DarkPill" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/spotify_surface2</item>
+        <item name="android:textColor">@color/spotify_text</item>
+        <item name="iconTint">@color/spotify_text</item>
+        <item name="rippleColor">@color/spotify_border</item>
+        <item name="cornerRadius">100dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingHorizontal">20dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Widget.Foundit.Spotify.SearchCard" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">100dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">@color/spotify_border</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cardBackgroundColor">@color/spotify_surface2</item>
+    </style>
+
+    <style name="Widget.Foundit.Spotify.Card" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardElevation">8dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="cardBackgroundColor">@color/spotify_surface</item>
+    </style>
+
+    <style name="Widget.Foundit.Spotify.FilterChip" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">@color/spotify_filter_bg</item>
+        <item name="android:textColor">@color/spotify_filter_text</item>
+        <item name="strokeColor">@color/spotify_border</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="chipCornerRadius">100dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingHorizontal">16dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="checkedIconVisible">false</item>
+    </style>
+
+    <style name="TextAppearance.Foundit.Spotify.SectionTitle" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/spotify_text</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.Foundit.Spotify.FeatureHeading" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/spotify_text</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.Foundit.Spotify.Body" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/spotify_text3</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextAppearance.Foundit.Spotify.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/spotify_text2</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <!-- Design system "Nav Link": 14px compact, tight line height, no letter
+         spacing. TabLayout bolds the selected tab itself. -->
+    <style name="TextAppearance.Foundit.Nav.Tab" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <!-- Settings section label: compact uppercase label voice, silver. -->
+    <style name="TextAppearance.Foundit.Settings.Section" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/spotify_text2</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+</resources>

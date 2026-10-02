@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Quoted-reply preview, reused in two places: inside a sent/received bubble
+     (tap to jump to the original) and above the composer (tap is inert there).
+     A 3dp green spine plus a nested surface carries the "this is a quote" meaning
+     without a border-heavy frame. Single LinearLayout root so it can be
+     <include>d into both. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/quoteBar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/bg_chat_quote"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingEnd="8dp"
+    android:minHeight="40dp">
+
+    <!-- Green spine: functional (it marks a quote), never decorative. -->
+    <View
+        android:id="@+id/quoteSpine"
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:minHeight="26dp"
+        android:background="@color/spotify_green" />
+
+    <ImageView
+        android:id="@+id/ivQuoteIcon"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_marginStart="6dp"
+        android:src="@drawable/ic_reply"
+        app:tint="@color/spotify_green"
+        android:importantForAccessibility="no" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvQuoteSender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/spotify_green"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/tvQuoteExcerpt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/spotify_text2"
+            android:textSize="12sp"
+            android:maxLines="2"
+            android:ellipsize="end" />
+    </LinearLayout>
+</LinearLayout>

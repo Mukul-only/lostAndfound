@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Profile: identity header, then MY POSTS / MY CLAIMS+RESULTS tabs.
+     Dark compression per the design system — content sits on #121212, the
+     header band on #181818, hairline dividers in #4D4D4D. Green is reserved
+     for the active tab indicator only. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/spotify_bg">
+
+    <!-- Profile is reached from Home's avatar, so it gets a back control
+         above the identity header, matching the Create tab's pattern. No
+         background: the header sits directly on the page shade instead of
+         raising a lighter band above the tabs. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="4dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <ImageButton
+            android:id="@+id/btnProfileBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/spotify_text"
+            android:contentDescription="@string/settings_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/nav_profile"
+            android:textColor="@color/spotify_text"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+    <!-- Identity header. Background-free for the same reason as the toolbar
+         above, so the avatar and name sit on the page shade. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
+
+<!-- Avatar: photo, else the default glyph. Neutral silver, never green —
+                     green is reserved for functional accents. -->
+          <FrameLayout
+              android:layout_width="56dp"
+              android:layout_height="56dp">
+
+              <ImageView
+                  android:id="@+id/ivProfilePhoto"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:background="@drawable/bg_spotify_avatar"
+                  android:scaleType="centerCrop"
+                  android:visibility="gone"
+                  android:contentDescription="@null" />
+
+              <ImageView
+                  android:id="@+id/ivProfilePlaceholderIcon"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:background="@drawable/bg_spotify_avatar"
+                  android:padding="16dp"
+                  android:src="@drawable/ic_person"
+                  app:tint="@color/spotify_text2" />
+          </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvProfileName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Campus Student"
+                android:textColor="@color/spotify_text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Own account only; never surfaced from another user's profile. -->
+            <TextView
+                android:id="@+id/tvProfileEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="student@campus.edu"
+                android:textColor="@color/spotify_text2"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Opens Settings -->
+        <ImageButton
+            android:id="@+id/btnProfileMenu"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_settings_gear"
+            app:tint="@color/spotify_text"
+            android:contentDescription="@string/nav_settings" />
+    </LinearLayout>
+
+    <!-- Tabs -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutProfile"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/spotify_bg"
+        app:tabIndicatorColor="@color/spotify_green"
+        app:tabIndicatorHeight="2dp"
+        app:tabSelectedTextColor="@color/spotify_text"
+        app:tabTextColor="@color/spotify_text2"
+        app:tabMode="fixed"
+        app:tabTextAppearance="@style/TextAppearance.Foundit.Nav.Tab">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/profile_tab_posts" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/profile_tab_claims" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <!-- Hairline divider beneath the tabs -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/spotify_border" />
+
+    <!-- Posts header: grid/list switch, one per content area -->
+    <LinearLayout
+        android:id="@+id/layoutPostsHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end|center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <ImageButton
+            android:id="@+id/btnViewToggle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_list"
+            app:tint="@color/spotify_text2"
+            android:contentDescription="@string/profile_switch_view" />
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshProfile"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvProfileContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="4dp"
+                android:paddingBottom="96dp" />
+
+            <ProgressBar
+                android:id="@+id/progressProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/spotify_green"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvProfileEmpty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="24dp"
+                android:textColor="@color/spotify_text2"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/layoutProfileError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="24dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvProfileError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/spotify_error"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnProfileRetry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:minHeight="48dp"
+                    android:text="@string/profile_retry"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.08"
+                    android:textSize="13sp"
+                    style="@style/Widget.Foundit.Spotify.OutlinedButton" />
+            </LinearLayout>
+        </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</LinearLayout>

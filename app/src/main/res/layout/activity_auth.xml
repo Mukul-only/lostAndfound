@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/spotify_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <!-- Campus Brand Header -->
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/ic_shield"
+            app:tint="@color/spotify_green"
+            android:contentDescription="Campus Shield" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Campus Lost &amp; Found"
+            android:textColor="@color/spotify_text"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Safe, verified returns on your campus"
+            android:textColor="@color/spotify_text2"
+            android:textSize="14sp" />
+
+        <!-- Supabase Unconfigured Warning Banner -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardConfigWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/spotify_surface2"
+            app:strokeColor="@color/spotify_error"
+            app:strokeWidth="1dp"
+            app:cardCornerRadius="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Supabase setup required"
+                    android:drawableStart="@drawable/ic_warning_amber"
+                    android:drawablePadding="6dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/spotify_error"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Add your Supabase URL and anon key in SupabaseConfig.java to connect to your project."
+                    android:textColor="@color/spotify_text3"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Toggle Tabs: Sign In / Register -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutAuth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@android:color/transparent"
+            app:tabIndicatorColor="@color/spotify_green"
+            app:tabSelectedTextColor="@color/spotify_text"
+            app:tabTextColor="@color/spotify_text2">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign In" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Register" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <!-- Form Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/spotify_surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/spotify_border"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Full Name Field (Register only) -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutFullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                     android:hint="Full Name (Student Name)"
+                     android:visibility="gone"
+                     style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+                    <com.example.lostandfound.ui.components.FounditTextInputEditText
+                        android:id="@+id/etFullName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                         android:inputType="textPersonName"
+                         android:maxLines="1" 
+                         android:textColor="@color/spotify_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Email Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                     android:hint="Campus Email Address"
+                     style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+                    <com.example.lostandfound.ui.components.FounditTextInputEditText
+                        android:id="@+id/etEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                         android:inputType="textEmailAddress"
+                         android:maxLines="1" 
+                         android:textColor="@color/spotify_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Password Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="Password (min. 6 characters)"
+                     app:passwordToggleEnabled="true"
+                     style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+                    <com.example.lostandfound.ui.components.FounditTextInputEditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                         android:inputType="textPassword"
+                         android:maxLines="1" 
+                         android:textColor="@color/spotify_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Error Notice -->
+                <TextView
+                    android:id="@+id/tvErrorMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                     android:layout_marginBottom="12dp"
+                     android:textColor="@color/spotify_error"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+
+                <!-- Email Confirmation Notice -->
+                <TextView
+                    android:id="@+id/tvEmailNotice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                     android:layout_marginBottom="12dp"
+                     android:textColor="@color/spotify_info"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+
+                <!-- Action Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSubmitAuth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                     android:minHeight="52dp"
+                     android:text="Sign In"
+                     android:textSize="13sp"
+                     style="@style/Widget.Foundit.Spotify.GreenPill" />
+
+                <!-- Loading Progress -->
+                <ProgressBar
+                    android:id="@+id/progressAuth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:indeterminateTint="@color/spotify_green"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="6dp"
+            android:drawableTint="@color/spotify_text2"
+            android:text="Accounts are protected with Row Level Security"
+            android:textColor="@color/spotify_text2"
+            android:textSize="12sp" />
+    </LinearLayout>
+</ScrollView>

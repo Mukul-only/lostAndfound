@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FOUNDIT</string>
+    <string name="home_hero_title">FOUNDIT</string>
+    <string name="home_hero_subtitle">Campus Lost &amp; Found</string>
+    <string name="home_search_hint">Search for lost items…</string>
+    <string name="home_report_action">Report lost or found item</string>
+    <string name="home_report_choice_title">What would you like to report?</string>
+    <string name="home_report_lost">I lost something</string>
+    <string name="home_report_found">I found something</string>
+    <string name="home_recent_header">Recent reports</string>
+    <string name="home_categories_header">Categories</string>
+    <string name="home_quick_categories">Quick Categories</string>
+    <string name="home_reports_header">Reports</string>
+    <string name="home_filter_all">All</string>
+    <string name="home_filter_found_recently">Found Recently</string>
+    <string name="home_filter_still_lost">Still Lost</string>
+    <string name="home_empty_state">No reports match your filters.
+Pull to refresh or try a different filter.</string>
+    <string name="home_loading">Loading reports…</string>
+    <string name="home_retry">Retry</string>
+    <string name="home_error_default">Something went wrong. Check your connection and try again.</string>
+    <string name="cat_all">All</string>
+    <string name="cat_electronics">Electronics</string>
+    <string name="cat_cards_id">Cards &amp; ID</string>
+    <string name="cat_keys">Keys</string>
+    <string name="cat_bags_wallets">Bags &amp; Wallets</string>
+    <string name="cat_clothing">Clothing</string>
+    <string name="cat_books_stationery">Books</string>
+    <string name="cat_other">Other</string>
+    <string name="cat_icon_electronics">ic_cat_electronics</string>
+    <string name="cat_icon_cards_id">ic_cat_cards_id</string>
+    <string name="cat_icon_keys">ic_cat_keys</string>
+    <string name="cat_icon_bags_wallets">ic_cat_bags_wallets</string>
+    <string name="cat_icon_clothing">ic_cat_clothing</string>
+    <string name="cat_icon_books_stationery">ic_cat_books_stationery</string>
+    <string name="cat_icon_other">ic_cat_other</string>
+    <string name="report_posted_by">Posted by %s</string>
+    <string name="report_type_lost">LOST</string>
+    <string name="report_type_found">FOUND</string>
+    <string name="report_opens_detail">View details</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_subtitle">Manage your account, safety and privacy.</string>
+    <string name="chats_title">Handover Messages</string>
+    <string name="chats_subtitle">Private chats with your matches.</string>
+    <string name="settings_back">Back</string>
+    <string name="settings_profile_section">Profile</string>
+    <string name="settings_safety_section">Safety</string>
+    <string name="settings_privacy_section">Data &amp; Privacy</string>
+    <string name="settings_account_section">Account</string>
+    <string name="settings_sign_out">Sign Out</string>
+    <string name="settings_sign_out_confirm">Are you sure you want to sign out?</string>
+    <string name="settings_version">Version %s</string>
+
+    <string name="settings_safety_guidelines">Campus Safety &amp; Handover Rules</string>
+    <string name="settings_safety_description">Recommended handover locations &amp; verification tips</string>
+    <string name="settings_safety_understood">Got it</string>
+    <string name="settings_safety_message">Meet in public.\n\n• Pick an active, well-lit place on campus such as the Octagon, a library entrance or the Admin Quad. Avoid quiet corridors, basements and parking areas after dark.\n\n• Drop a pin inside campus grounds so you both know where to meet.\n\n• Check the verification answer before handing anything over. If it does not match, do not meet up — decline the claim instead.\n\n• Keep the conversation in the app chat until you are actually face to face.\n\n• Never share your phone number, address or payment details in a report or claim.\n\nIf a meetup or message feels wrong, decline the claim and use \"Report this post\" to flag it to moderators.</string>
+    <string name="settings_report_problem">Report a Problem</string>
+    <string name="settings_report_problem_description">Flag a post or report inaccurate information</string>
+    <string name="settings_report_problem_message">Use the \"Report this post\" option on any report to flag it to moderators. For anything else, contact your campus IT help desk.</string>
+    <string name="settings_report_problem_understood">Understood</string>
+
+    <string name="settings_privacy">Privacy &amp; Security</string>
+    <string name="settings_privacy_description">How your data is stored and protected</string>
+    <string name="settings_privacy_message">Your session is stored encrypted on this device.\n\nReports and claims are protected by PostgreSQL Row Level Security, so only you and the people involved in a claim can read them.\n\nYour email address is never shown on reports. Verification notes and handover details stay private to you and the report owner.</string>
+    <string name="settings_privacy_understood">Got it</string>
+
+    <string name="settings_clear_cache">Clear Image Cache</string>
+    <string name="settings_clear_cache_description">Frees up space used by cached photos</string>
+    <string name="settings_clear_cache_done">Image cache cleared</string>
+    <string name="fab_lost">I Lost It</string>
+    <string name="fab_found">I Found It</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_browse">Browse</string>
+    <string name="nav_create">Create</string>
+    <string name="nav_chats">Chats</string>
+    <string name="content_description_avatar">User profile</string>
+    <string name="content_description_notification">Notifications</string>
+    <string name="content_description_search">Search</string>
+    <string name="content_description_category">Category filter</string>
+    <string name="content_description_clear">Clear filter</string>
+    <string name="content_description_photo">Item photo</string>
+    <string name="content_description_badge">Status badge</string>
+    <string name="content_description_overflow">More options</string>
+    <string name="browse_show_filters">Show filters</string>
+    <string name="browse_hide_filters">Hide filters</string>
+    <string name="browse_filters_title">Filters</string>
+    <string name="browse_report_type">Report type</string>
+    <string name="browse_category_label">Category</string>
+    <string name="browse_campus_label">Campus location</string>
+    <string name="browse_type_all">All</string>
+    <string name="browse_type_lost">Lost Item</string>
+    <string name="browse_type_found">Found Item</string>
+    <string name="browse_all_categories">All Categories</string>
+    <string name="browse_all_campus">All Campus</string>
+    <string name="browse_title_category">Category</string>
+    <string name="browse_title_campus">Campus</string>
+    <string name="profile_edit">Edit profile</string>
+    <string name="profile_edit_title">Edit profile</string>
+    <string name="profile_add_photo">Add photo</string>
+    <string name="profile_remove_photo">Remove photo</string>
+    <string name="profile_photo_removed">Photo removed</string>
+    <string name="profile_change_photo">Change photo</string>
+    <string name="profile_name_hint">Display name</string>
+    <string name="profile_save">Save</string>
+    <string name="profile_cancel">Cancel</string>
+    <string name="profile_saved">Profile updated!</string>
+    <string name="profile_photo_error">Could not load the selected photo. Please try another image.</string>
+
+    <!-- Report photo: gallery or camera. Option labels live in
+         dialog_photo_source.xml alongside their icons. -->
+    <string name="report_photo_source_title">Add photo</string>
+    <string name="report_photo_source_subtitle">Pick a photo for this report.</string>
+    <string name="photo_source_subtitle">Choose an existing image or take a new one.</string>
+    <string name="profile_photo_source_subtitle">Pick a photo for your profile.</string>
+    <string name="report_add_photo">Add photo</string>
+    <string name="report_change_photo">Change photo</string>
+    <string name="report_no_camera_app">No camera app is available on this device.</string>
+    <string name="report_camera_failed">Could not open the camera. Please try again.</string>
+    <string name="report_photo_load_failed">Could not load that photo. Please try another.</string>
+    <!-- Must match the FileProvider authority in the manifest. -->
+    <string name="fileprovider_authority" translatable="false">com.example.lostandfound.fileprovider</string>
+
+    <!-- Profile -->
+    <string name="nav_profile">Profile</string>
+    <string name="nav_settings">Settings</string>
+    <string name="profile_tab_posts">MY POSTS</string>
+    <string name="profile_tab_claims">MY CLAIMS/RESPONSES</string>
+    <string name="profile_switch_view">Switch between grid and list</string>
+    <string name="profile_view_grid">Grid view</string>
+    <string name="profile_view_list">List view</string>
+    <string name="profile_empty_posts">You haven\'t posted any reports yet.</string>
+    <string name="profile_empty_claims">You haven\'t submitted any claims or responses yet.</string>
+    <string name="profile_retry">Retry</string>
+    <!-- Map picker, meeting-proposal mode: "handover location" wording -->
+    <string name="location_propose_title">Suggest handover location</string>
+    <string name="location_propose_confirm">Suggest handover location</string>
+    <string name="location_handover_note_hint">Handover location description (Optional)</string>
+    <!-- Claim card: the finder asked / the claimant answered -->
+    <string name="claim_submitted_on">Submitted %1$s</string>
+    <string name="claim_owner_note">Owner note: %1$s</string>
+    <string name="claim_accept_and_chat">Accept Claim &amp; Chat</string>
+    <string name="claim_open_chat">Open Chat</string>
+    <string name="claim_decline">Decline</string>
+    <!-- The Q/A row has no visible labels, so the icons carry the meaning for
+         screen readers as well as sighted users. -->
+    <string name="content_description_claim_question">Question asked</string>
+    <string name="content_description_claim_answer">Answer given</string>
+    <string name="content_description_profile_photo">Profile photo</string>
+    <!-- 1-on-1 chat: composer, proposals, response events, quoted replies -->
+    <string name="chat_input_hint">Message</string>
+    <string name="chat_send">Send message</string>
+    <string name="chat_back">Back</string>
+    <string name="chat_title_default">Handover conversation</string>
+    <string name="chat_loading">Loading conversation…</string>
+    <string name="chat_empty">No messages yet. Say hello and agree on a handover location.</string>
+    <string name="chat_not_ready">Handover conversation not ready yet.</string>
+
+    <!-- Meeting proposals live in the conversation, not in a header panel. -->
+    <string name="chat_propose_spot_cd">Suggest a handover location</string>
+    <string name="chat_proposal_title">Handover location</string>
+    <string name="chat_proposal_proposed_by">Suggested by %1$s · %2$s</string>
+    <string name="chat_proposal_view_map">Map</string>
+    <string name="chat_proposal_accept">Accept</string>
+    <string name="chat_proposal_reject">Decline</string>
+    <string name="chat_proposal_current_banner">Current agreed spot</string>
+    <string name="chat_proposal_state_pending">PENDING</string>
+    <string name="chat_proposal_state_accepted_yours">ACCEPTED</string>
+    <string name="chat_proposal_state_previous">PREVIOUSLY ACCEPTED</string>
+    <string name="chat_proposal_state_declined">DECLINED</string>
+    <string name="chat_proposal_state_closed">CLOSED</string>
+    <string name="chat_proposal_state_pending_you">Waiting for them to accept or decline</string>
+    <string name="chat_proposal_state_pending_them">Waiting for you to accept or decline</string>
+    <string name="chat_proposal_state_accepted_by">%1$s accepted this spot</string>
+    <string name="chat_proposal_state_declined_by">%1$s declined this spot</string>
+    <string name="chat_proposal_state_accepted_plain">This spot was accepted.</string>
+    <string name="chat_proposal_state_declined_plain">This spot was declined.</string>
+    <string name="chat_proposal_state_closed_by">This spot was replaced by a newer suggestion</string>
+    <string name="chat_proposal_agreed_cd">Current agreed handover location. %1$s accepted this location.</string>
+    <string name="chat_proposal_agreed_cd_plain">Current agreed handover location.</string>
+
+    <!-- Centered response events -->
+    <string name="chat_event_accepted">%1$s accepted the handover location.</string>
+    <string name="chat_event_rejected">%1$s declined the handover location.</string>
+    <string name="chat_event_cd">%1$s Double tap to jump to that handover location.</string>
+
+    <!-- Proposal actions and their failure states -->
+    <string name="chat_spot_proposed">Handover location suggested. The other student can accept or decline it.</string>
+    <string name="chat_spot_failed">Could not suggest a spot: %1$s</string>
+    <string name="chat_accepted">Handover location accepted. That is where you are meeting.</string>
+    <string name="chat_declined">Handover location declined.</string>
+    <string name="chat_respond_failed">Could not update that spot: %1$s</string>
+    <string name="chat_respond_stale">That spot was already answered. This chat is up to date.</string>
+    <string name="chat_proposing">Suggesting your spot…</string>
+    <string name="chat_responding">Saving your answer…</string>
+
+    <!-- Quoted replies -->
+    <string name="chat_reply_to">Replying to %1$s</string>
+    <string name="chat_reply_summary">Handover location · %1$s</string>
+    <string name="chat_reply_meeting_brief">Handover location</string>
+    <string name="chat_reply_action">Reply</string>
+    <string name="chat_cancel_reply">Cancel reply</string>
+    <string name="chat_quote_cd">Replying to %1$s: %2$s. Double tap to jump to it.</string>
+    <string name="chat_quote_jump_cd">Jumped to the quoted message.</string>
+    <string name="chat_quote_unavailable">The original message is not loaded, so it cannot be opened.</string>
+
+    <!-- Composer status line -->
+    <string name="chat_sending">Sending…</string>
+    <string name="chat_send_failed_kept">Not sent: %1$s. Your text was kept — press send to retry.</string>
+    <!-- Unread indicators -->
+    <string name="chats_nav_unread_cd">Chats, %1$s unread messages</string>
+    <string name="chats_row_cd_unread">%1$s, %2$d unread messages</string>
+    <string name="chats_row_cd_read">%1$s, no unread messages</string>
+    <string name="chats_unread_cleared">All caught up</string>
+
+    <!-- ===== Report Details (DESIGN.md hierarchy) ===== -->
+    <string name="detail_back">Back</string>
+    <string name="detail_title">Report Details</string>
+    <string name="detail_photo">Item photo</string>
+    <string name="detail_no_photo">No photo added</string>
+    <string name="detail_lost_item">LOST ITEM</string>
+    <string name="detail_found_item">FOUND ITEM</string>
+    <string name="detail_status_open">OPEN</string>
+    <string name="detail_description">Description</string>
+    <string name="detail_description_placeholder">Detailed description of the item…</string>
+    <string name="detail_category">Category</string>
+    <string name="detail_location">Campus location</string>
+    <string name="detail_date">Date</string>
+    <string name="detail_reported_by">Reported by</string>
+    <string name="detail_reported_by_value">Reported by %1$s</string>
+    <string name="detail_map_last_seen">Last seen location</string>
+    <string name="detail_map_found">Where the item was found</string>
+    <string name="detail_map_last_seen_title">Last seen location (campus pin)</string>
+    <string name="detail_map_found_title">Where the item was found (campus pin)</string>
+    <string name="detail_view_map">View map</string>
+    <string name="detail_pin_note">Pinned location. Never the finder\'s live location.</string>
+    <string name="detail_pin_coordinates">Pinned at %1$.5f, %2$.5f • %3$s</string>
+    <string name="detail_pin_note_last_seen">last seen, not a live location</string>
+    <string name="detail_pin_note_found">where the item was found, not a live location</string>
+    <string name="detail_verification_question">Verification question</string>
+    <string name="detail_question_placeholder">The finder\'s question appears here.</string>
+    <string name="detail_secret_detail">Your secret detail · only you can see this</string>
+    <string name="detail_secret_placeholder">The identifying detail you saved appears here.</string>
+    <string name="detail_owner_actions">Manage this report</string>
+    <string name="detail_review_claims">Review responses</string>
+    <string name="detail_mark_returned">Mark returned</string>
+    <string name="detail_close_report">Close report</string>
+    <string name="detail_claim_item">This is mine — claim item</string>
+    <string name="detail_claim_found">I found this item</string>
+    <string name="detail_claim_pending">Response submitted — pending review</string>
+    <string name="detail_claim_pending_body">You have submitted a claim for this item. The finder will review your details and reply here.</string>
+    <string name="detail_claim_accepted">Claim accepted</string>
+    <string name="detail_claim_accepted_body">The finder verified your details and arranged the handover.</string>
+    <string name="detail_open_chat">Open handover chat</string>
+    <string name="detail_claim_rejected">Claim declined</string>
+    <string name="detail_claim_rejected_body">Your claim was reviewed and not accepted for this report, so you cannot submit another one.</string>
+    <string name="detail_claim_rejected_note">Owner note: %1$s</string>
+    <string name="detail_not_open">This report has been arranged or closed and is no longer accepting responses.</string>
+    <string name="detail_report_inappropriate">Report inappropriate post</string>
+    <string name="detail_invalid_id">Invalid report ID</string>
+    <!-- Owner confirmations -->
+    <string name="detail_mark_returned_title">Mark as returned</string>
+    <string name="detail_mark_returned_message">Has this item been safely returned to its rightful owner?</string>
+    <string name="detail_mark_returned_confirm">Yes, item returned</string>
+    <string name="detail_mark_returned_done">Item marked as returned.</string>
+    <string name="detail_close_title">Close report</string>
+    <string name="detail_close_message">Are you sure you want to close this report? It will no longer appear active.</string>
+    <string name="detail_close_confirm">Close report</string>
+    <string name="detail_close_done">Report closed.</string>
+    <string name="detail_location_unavailable">Location not available for this report</string>
+    <!-- ===== Safety report dialog ===== -->
+    <string name="abuse_dialog_title">Report inappropriate post</string>
+    <string name="abuse_dialog_subtitle">Help keep campus safe. Choose a reason:</string>
+    <string name="abuse_reason_hint">Reason *</string>
+    <string name="abuse_details_hint">Details (optional)</string>
+    <string name="abuse_reason_prompt">Choose a reason</string>
+    <string name="abuse_details_too_short">Please provide at least 5 characters of detail.</string>
+    <string name="abuse_submitted">Thank you. Your report has been sent to moderators.</string>
+    <string name="abuse_submit">Submit safety report</string>
+
+</resources>

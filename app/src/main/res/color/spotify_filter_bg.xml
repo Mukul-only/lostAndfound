@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pressed uses Border Gray, not spotify_card: the Browse filter panel is
+        itself spotify_card, so a spotify_card press made the chip vanish. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:color="@color/spotify_green" />
+    <item android:state_selected="true" android:color="@color/spotify_green" />
+    <item android:state_pressed="true" android:color="@color/spotify_border" />
+    <item android:color="@color/spotify_surface2" />
+</selector>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Optional: Only requested at runtime if user taps 'My Location' button on the picker -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- No CAMERA permission: capture is delegated to the camera app, which
+         owns its own permission. Declaring it here would force us to request
+         runtime access we do not need. -->
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.LostAndFound">
+
+        <!-- Entry Point / Main Router -->
+        <!-- adjustPan: keyboard overlays the UI (no window resize), so the
+             bottom navigation never gets lifted mid-screen while typing. -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Authentication -->
+        <activity
+            android:name=".ui.auth.AuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!-- Create & Edit Report is now CreateEditReportFragment inside MainActivity -->
+        <!-- Report Details -->
+        <activity
+            android:name=".ui.report.ReportDetailActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!-- Fullscreen Photo Viewer -->
+        <activity
+            android:name=".ui.report.ImageViewerActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!-- Owner Claims Review -->
+        <activity
+            android:name=".ui.claims.ClaimsReviewActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!-- Hands a camera app write access to a single temp file in the app
+             cache. No storage permissions needed, and no CAMERA permission:
+             capture is delegated to the camera app, not this one. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+        <!-- 1-on-1 Handover Chat. Exception to the app-wide adjustPan rule:
+             keeps adjustResize so the message composer stays visible above
+             the keyboard while typing. -->
+        <activity
+            android:name=".ui.chat.ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Interactive Map Location Picker (Where Item Was Found / Handover Meeting Spot) -->
+        <activity
+            android:name=".ui.map.LocationPickerActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+
+    </application>
+
+</manifest>

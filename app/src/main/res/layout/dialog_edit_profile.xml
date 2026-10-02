@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/profile_edit_title"
+        android:textColor="@color/spotify_text"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_avatar_circle">
+
+        <ImageView
+            android:id="@+id/ivEditPhotoPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+<ImageView
+              android:id="@+id/ivEditPhotoPlaceholder"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="24dp"
+              android:src="@drawable/ic_person"
+              android:tint="@color/spotify_text2"
+              android:contentDescription="@string/content_description_avatar" />
+
+    </FrameLayout>
+
+    <!-- Add / Remove stacked vertically, both built to DESIGN.md's "Outlined
+         Pill" (the spec's pattern for secondary actions): transparent fill,
+         1px #7c7c7c border, full pill radius, 48dp touch target, and the
+         uppercase 14px/700 label with ~1.4px tracking that §3 and §7 call for.
+         Geometry is identical for both; only the semantic colour differs, so
+         Remove reads as destructive without breaking the symmetry.
+
+         The 8px gap lives on Remove's top margin rather than Add's bottom one,
+         so hiding Remove (no photo yet) leaves no trailing gap. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditPickPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:gravity="center"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:text="@string/profile_add_photo"
+            android:textAllCaps="true"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1"
+            app:icon="@drawable/ic_photo"
+            app:iconGravity="textStart"
+            app:iconSize="18dp"
+            app:iconPadding="8dp"
+            app:iconTint="@color/spotify_text"
+            style="@style/Widget.Foundit.Spotify.OutlinedButton" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditPhotoRemove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:minHeight="48dp"
+            android:gravity="center"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:text="@string/profile_remove_photo"
+            android:textAllCaps="true"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1"
+            android:textColor="@color/spotify_error"
+            app:strokeColor="@color/spotify_error"
+            app:icon="@drawable/ic_close"
+            app:iconGravity="textStart"
+            app:iconSize="18dp"
+            app:iconPadding="8dp"
+            app:iconTint="@color/spotify_error"
+            style="@style/Widget.Foundit.Spotify.OutlinedButton"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilEditProfileName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/profile_name_hint"
+        app:errorEnabled="true"
+        style="@style/Widget.Foundit.Spotify.TextInputLayout">
+
+        <com.example.lostandfound.ui.components.FounditTextInputEditText
+            android:id="@+id/etEditProfileName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName|textCapWords"
+            android:maxLength="60"
+            android:maxLines="1"
+            android:textColor="@color/spotify_text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvEditProfileError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/spotify_error"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/progressEditProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:indeterminateTint="@color/spotify_green"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginTop="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditProfileCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/profile_cancel"
+            android:textAllCaps="false"
+            style="@style/Widget.Foundit.Spotify.TextButton" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditProfileSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="52dp"
+            android:text="@string/profile_save"
+            android:textAllCaps="false"
+            style="@style/Widget.Foundit.Spotify.GreenPill" />
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Create-report menu (FAB + Home single action): monochrome pair so the
+         menu coordinates with the calm Home. LOST/FOUND identity stays in
+         the feed badges, not in loud button fills. -->
+    <style name="Widget.App.Button.PopupLost" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/home_ink</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="iconTint">@color/white</item>
+        <item name="rippleColor">@color/home_pressed</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingVertical">12dp</item>
+    </style>
+
+    <style name="Widget.App.Button.PopupFound" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/home_ink</item>
+        <item name="android:textColor">@color/home_ink</item>
+        <item name="iconTint">@color/home_ink</item>
+        <item name="rippleColor">@color/home_surface_card</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingVertical">12dp</item>
+    </style>
+</resources>

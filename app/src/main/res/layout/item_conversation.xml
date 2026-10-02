@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Flat conversation row: full list width, no card container, border,
+     or shadow. Dividers come from FeedDividerDecoration (between rows only). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@color/spotify_bg"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:minHeight="68dp">
+
+    <ImageView
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="@drawable/bg_icon_rounded"
+        android:src="@drawable/ic_chat"
+        app:tint="@color/spotify_green"
+        android:padding="10dp"
+        android:layout_marginEnd="12dp"
+        android:contentDescription="Chat icon" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvConvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Report Title"
+                android:textColor="@color/spotify_text"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvConvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="10:30 AM"
+                android:textColor="@color/spotify_text2"
+                android:textSize="11sp"
+                android:maxLines="1" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvConvLastMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Tap to arrange handover safely..."
+            android:textColor="@color/spotify_text2"
+            android:textSize="13sp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+    <!-- Unread badge. A plain pill rather than the Material BadgeDrawable so it
+         keeps this row's own type and colour language; hidden entirely (not
+         zeroed) when there is nothing unread. Width wraps its number so a count
+         of 9 is not the same width as 120. -->
+    <TextView
+        android:id="@+id/tvConvUnreadBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:minWidth="20dp"
+        android:gravity="center"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:background="@drawable/bg_unread_badge"
+        android:textColor="@color/spotify_on_green"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:visibility="gone"
+        android:importantForAccessibility="no" />
+</LinearLayout>

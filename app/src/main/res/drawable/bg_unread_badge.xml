@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Unread count pill. Spotify green, which the design system reserves for
+     functional state - this marks something requiring attention, so green is
+     the correct use and the pill shape matches the rest of the system. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="100dp" />
+    <solid android:color="@color/spotify_green" />
+</shape>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- FOUNDIT brand palette. Repointed off the old amber/orange onto the
+         design system's green + achromatic greys, so no component falls back to
+         orange via the Material colorPrimary chain. -->
+    <color name="brand_primary">#1ED760</color>
+    <color name="brand_primary_variant">#1DB954</color>
+    <color name="brand_primary_light">#181818</color>
+    <color name="brand_primary_container">#1F1F1F</color>
+    <color name="brand_on_primary">#000000</color>
+    <color name="brand_on_primary_container">#FFFFFF</color>
+
+    <!-- Secondary - neutral silver -->
+    <color name="brand_secondary">#B3B3B3</color>
+    <color name="brand_secondary_variant">#CBCBCB</color>
+    <color name="brand_secondary_light">#181818</color>
+    <color name="brand_secondary_container">#252525</color>
+    <color name="brand_on_secondary">#121212</color>
+    <color name="brand_on_secondary_container">#FFFFFF</color>
+
+    <!-- Tertiary - announcement blue for informational accents -->
+    <color name="brand_tertiary">#539DF5</color>
+    <color name="brand_tertiary_container">#1F1F1F</color>
+    <color name="brand_on_tertiary">#121212</color>
+    <color name="brand_on_tertiary_container">#FFFFFF</color>
+
+    <!-- Legacy color aliases for backward compatibility with existing drawables/layouts -->
+    <color name="primary">@color/brand_primary</color>
+    <color name="primary_variant">@color/brand_primary_variant</color>
+    <color name="primary_light">@color/brand_primary_light</color>
+    <color name="secondary">@color/brand_secondary</color>
+    <color name="secondary_light">@color/brand_secondary_light</color>
+    <color name="accent">@color/brand_tertiary</color>
+    <color name="m3_secondary_container">@color/brand_secondary_container</color>
+    <color name="m3_on_secondary_container">@color/brand_on_secondary_container</color>
+    <color name="m3_surface_variant">@color/surface_variant</color>
+    <color name="m3_on_surface_variant">@color/on_surface_variant</color>
+    <color name="m3_outline">@color/outline</color>
+
+    <!-- Item Type Colors (preserved for semantic meaning) -->
+    <color name="lost_badge">#DC2626</color>
+    <color name="lost_badge_bg">#FEE2E2</color>
+    <color name="found_badge">#16A34A</color>
+    <color name="found_badge_bg">#DCFCE7</color>
+
+    <!-- Success / error text ramp for claim & status surfaces (no ad-hoc hexes) -->
+    <color name="success_text">#15803D</color>
+    <color name="success_text_strong">#166534</color>
+    <color name="surface_success_bg">#F0FDF4</color>
+    <color name="surface_success_stroke">#BBF7D0</color>
+    <color name="error_text">#B91C1C</color>
+    <color name="error_text_strong">#991B1B</color>
+    <color name="error_text_deep">#7F1D1D</color>
+    <color name="banner_info_bg">#EFF6FF</color>
+    <color name="banner_info_text">#1E40AF</color>
+
+    <!-- Status Colors -->
+    <color name="status_open">#16A34A</color>
+    <color name="status_arranged">#CBCBCB</color>
+    <color name="status_returned">#2563EB</color>
+    <color name="status_closed">#64748B</color>
+
+    <!-- Deep Charcoal Neutrals (replacing navy) -->
+    <color name="neutral_900">#0F172A</color>   <!-- Deep charcoal - primary text -->
+    <color name="neutral_800">#1E293B</color>   <!-- High emphasis -->
+    <color name="neutral_700">#334155</color>   <!-- Medium emphasis -->
+    <color name="neutral_600">#475569</color>   <!-- Disabled text -->
+    <color name="neutral_500">#64748B</color>   <!-- Secondary text -->
+    <color name="neutral_400">#94A3B8</color>   <!-- Muted text -->
+    <color name="neutral_300">#CBD5E1</color>   <!-- Outlines, dividers -->
+    <color name="neutral_200">#E2E8F0</color>   <!-- Surface variant, hover -->
+    <color name="neutral_100">#F1F5F9</color>   <!-- Surface container -->
+    <color name="neutral_50">#F8FAFC</color>    <!-- Background -->
+    <color name="neutral_0">#FFFFFF</color>     <!-- Surface -->
+
+    <!-- Surface & Background -->
+    <color name="background">@color/neutral_50</color>
+    <color name="surface">@color/neutral_0</color>
+    <color name="surface_container">@color/neutral_100</color>
+    <color name="surface_variant">@color/neutral_100</color>
+    <color name="surface_container_high">@color/neutral_200</color>
+    <color name="on_surface">@color/neutral_900</color>
+    <color name="on_surface_variant">@color/neutral_500</color>
+    <color name="on_background">@color/neutral_900</color>
+
+    <!-- Outline & Divider -->
+    <color name="outline">@color/neutral_300</color>
+    <color name="outline_variant">@color/neutral_200</color>
+    <color name="divider">@color/neutral_200</color>
+    <color name="card_stroke">@color/outline_variant</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">@color/neutral_900</color>
+    <color name="text_secondary">@color/neutral_600</color>
+    <color name="text_tertiary">@color/neutral_500</color>
+    <color name="text_muted">@color/neutral_400</color>
+    <color name="text_on_brand">@color/brand_on_primary</color>
+    <color name="text_on_brand_container">@color/brand_on_primary_container</color>
+
+    <!-- Input Field Colors -->
+    <color name="input_stroke_default">@color/outline</color>
+    <color name="input_stroke_focused">@color/brand_primary</color>
+    <color name="input_stroke_error">@color/lost_badge</color>
+    <color name="input_hint">@color/text_muted</color>
+    <color name="input_bg">@color/surface</color>
+
+    <!-- FOUNDIT Home (Cal-inspired) tokens — white canvas, near-black actions.
+         Roboto system sans is used as the Inter substitute (Cal Sans is
+         licensed to Cal.com and cannot be bundled; see DESIGN.md Known Gaps). -->
+    <color name="home_canvas">#FFFFFF</color>
+    <color name="home_ink">#111111</color>
+    <color name="home_pressed">#242424</color>
+    <color name="home_body">#374151</color>
+    <color name="home_muted">#6B7280</color>
+    <color name="home_surface_soft">#F8F9FA</color>
+    <color name="home_surface_card">#F5F5F5</color>
+    <color name="home_hairline">#E5E7EB</color>
+    <color name="home_hairline_soft">#F3F4F6</color>
+    <color name="home_error">#EF4444</color>
+
+    <!-- Bottom Navigation (DESIGN.md + Home: near-black bar, white active,
+         silver inactive — same tokens as the redesigned Home). -->
+    <color name="nav_selected">@color/spotify_text</color>
+    <color name="nav_unselected">@color/spotify_text2</color>
+    <color name="nav_indicator">@color/spotify_surface2</color>
+    <color name="nav_background">@color/spotify_bg</color>
+
+    <!-- Error -->
+    <color name="error">@color/lost_badge</color>
+    <color name="error_container">@color/lost_badge_bg</color>
+    <color name="on_error">@color/white</color>
+    <color name="on_error_container">@color/lost_badge</color>
+
+    <!-- Chat Bubble Colors (DESIGN.md dark: green own-message,
+         #1f1f1f incoming; text colors set in item_message). -->
+    <color name="chat_bubble_out">@color/spotify_green</color>
+    <color name="chat_bubble_in">@color/spotify_surface2</color>
+    <!-- Nested quote surface: a step darker than both the incoming bubble and
+         the composer, so a quote reads as a layer inside whatever holds it
+         without needing a border. -->
+    <color name="spotify_chat_quote_bg">#2A2A2A</color>
+
+    <!-- System Bar Colors -->
+    <color name="status_bar">@color/brand_primary_variant</color>
+    <color name="nav_bar">@color/spotify_bg</color>
+
+    <!-- Semantic Surface Colors -->
+    <color name="surface_info_bg">@color/brand_primary_light</color>
+    <color name="surface_info_stroke">@color/brand_primary_container</color>
+    <color name="surface_info_text">@color/brand_on_primary_container</color>
+    <color name="surface_amber_bg">@color/brand_secondary_light</color>
+    <color name="surface_amber_stroke">@color/brand_secondary_container</color>
+    <color name="surface_amber_text">@color/brand_on_secondary_container</color>
+    <color name="surface_neutral">@color/neutral_100</color>
+
+    <!-- Hero Gradient Colors -->
+    <color name="hero_start">@color/brand_primary</color>
+    <color name="hero_end">@color/brand_secondary</color>
+
+    <!-- FAB (coordinated with Home: near-black action) -->
+    <color name="fab_background">@color/home_ink</color>
+    <color name="fab_on_background">@color/white</color>
+
+    <!-- Chip/Filter Colors -->
+    <color name="chip_selected_bg">@color/brand_primary</color>
+    <color name="chip_selected_text">@color/white</color>
+    <color name="chip_unselected_bg">@color/surface</color>
+    <color name="chip_unselected_text">@color/text_primary</color>
+    <color name="chip_stroke">@color/outline</color>
+
+    <!-- Quick-category tile icon backgrounds (pastel bg + saturated icon, matched pairs) -->
+    <color name="cat_electronics_bg">#DBEAFE</color>
+    <color name="cat_electronics_fg">#1D4ED8</color>
+    <color name="cat_cards_id_bg">#CCFBF1</color>
+    <color name="cat_cards_id_fg">#0F766E</color>
+    <color name="cat_keys_bg">#252525</color>
+    <color name="cat_keys_fg">#B45309</color>
+    <color name="cat_bags_wallets_bg">#FFEDD5</color>
+    <color name="cat_bags_wallets_fg">#C2410C</color>
+    <color name="cat_clothing_bg">#DCFCE7</color>
+    <color name="cat_clothing_fg">#15803D</color>
+    <color name="cat_books_stationery_bg">#E7E5E4</color>
+    <color name="cat_books_stationery_fg">#57534E</color>
+    <color name="cat_other_bg">#F1F5F9</color>
+    <color name="cat_other_fg">#64748B</color>
+
+    <!-- FOUNDIT Home Spotify redesign tokens (DESIGN.md, scoped to Home only).
+         Near-black immersion; green is functional-only (active/CTA). -->
+    <color name="spotify_bg">#121212</color>
+    <color name="spotify_surface">#181818</color>
+    <color name="spotify_surface2">#1F1F1F</color>
+    <color name="spotify_card">#252525</color>
+    <color name="spotify_text">#FFFFFF</color>
+    <color name="spotify_text2">#B3B3B3</color>
+    <color name="spotify_text3">#CBCBCB</color>
+    <color name="spotify_green">#1ED760</color>
+    <color name="spotify_green_border">#1DB954</color>
+    <color name="spotify_on_green">#000000</color>
+    <color name="spotify_border">#4D4D4D</color>
+    <color name="spotify_outline">#7C7C7C</color>
+    <color name="spotify_error">#F3727F</color>
+    <color name="spotify_info">#539DF5</color>
+    <!-- Warning voice (DESIGN.md §2 semantic): pending states. Not the retired
+         brand amber — this is the pure functional orange. -->
+    <color name="spotify_warning">#FFA42B</color>
+    <!-- Text-selection wash: green at 40% — white selected text stays readable,
+         and it never collides with the red error voice. -->
+    <color name="spotify_highlight">#661ED760</color></resources>

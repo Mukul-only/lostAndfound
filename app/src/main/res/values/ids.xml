@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Profile is reached from the circular avatar in the bottom bar rather
+         than a menu item, so it needs its own id for the tab machinery. -->
+    <item name="nav_profile_tab" type="id" />
+
+    <!-- Custom accessibility action id for "Reply" on a chat row. A swipe is a
+         drag gesture, and WCAG 2.2 AA requires a single-pointer alternative;
+         an action exposed here is reachable from the screen reader's actions
+         menu without any gesture at all. -->
+    <item name="chat_action_reply" type="id" />
+</resources>

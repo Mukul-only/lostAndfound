@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Shared dropdown row for field spinners.
+     The row must stay transparent: the popup's own surface (bg_dropdown_popup)
+     supplies the fill, and an opaque row background is a full-width rectangle
+     that clips the popup's rounded corners back to square.
+     ?android:attr/selectableItemBackground keeps touch feedback without
+     painting over the corners. -->
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dp"
+    android:gravity="center_vertical"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:textColor="@color/spotify_text"
+    android:textSize="15sp"
+    android:maxLines="2"
+    android:ellipsize="end" />

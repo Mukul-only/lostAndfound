@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Press feedback only: no persistent background and no border, so the icon
+     sits directly on the header surface. Only a mask item is declared, so
+     nothing paints at rest and the ripple is contained to a circle.
+
+     ?attr/selectableItemBackgroundBorderless cannot be used here because it
+     resolves against the app's Light parent theme and paints a white disc. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/spotify_surface2">
+    <item android:id="@android:id/mask">
+        <shape android:shape="oval">
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+</ripple>

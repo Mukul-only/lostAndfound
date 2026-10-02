@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A meeting proposal, as a permanent item in the conversation.
+     Full width rather than a bubble: a proposal is a decision both sides have to
+     be able to find again, so it gets its own surface, its own name, and its own
+     state chip. State is carried by the chip's WORD plus its icon, never by
+     colour alone; green is reserved for the one agreed spot.
+
+     Accept / Reject appear only while the proposal is pending AND the reader is
+     the other participant - the server enforces the same rule, this is just the
+     honest UI reflection of it. -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardProposal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/spotify_surface2"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/spotify_border">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Header: marker icon, "Meeting spot", proposer, state chip -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/ivProposalIcon"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/ic_location"
+                app:tint="@color/spotify_text2"
+                android:importantForAccessibility="no" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvProposalTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chat_proposal_title"
+                    android:textColor="@color/spotify_text"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
+
+                <TextView
+                    android:id="@+id/tvProposalBy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/spotify_text2"
+                    android:textSize="11sp"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+            </LinearLayout>
+
+            <!-- State chip. Text first, icon second: the label is the meaning,
+                 the icon is the at-a-glance duplicate. -->
+            <LinearLayout
+                android:id="@+id/layoutProposalState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_chat_hint"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:minHeight="24dp">
+
+                <ImageView
+                    android:id="@+id/ivProposalState"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_map_pin"
+                    android:importantForAccessibility="no" />
+
+                <TextView
+                    android:id="@+id/tvProposalState"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.06"
+                    android:textColor="@color/spotify_text2" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- "This is where you are meeting" - only on the single agreed spot. -->
+        <TextView
+            android:id="@+id/tvProposalCurrent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_chat_hint"
+            android:padding="8dp"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:text="@string/chat_proposal_current_banner"
+            android:textColor="@color/spotify_green"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvProposalNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/spotify_text"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvProposalCoordinates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/spotify_text2"
+            android:textSize="11sp" />
+
+        <LinearLayout
+            android:id="@+id/layoutProposalActions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnProposalViewMap"
+                style="@style/Widget.Foundit.Spotify.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="48dp"
+                android:layout_marginEnd="4dp"
+                android:text="@string/chat_proposal_view_map"
+                android:textAllCaps="true"
+                android:textSize="11sp"
+                android:letterSpacing="0.08"
+                app:icon="@drawable/ic_location"
+                app:iconSize="14dp"
+                app:iconPadding="4dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnProposalReject"
+                style="@style/Widget.Foundit.Spotify.DangerOutline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="48dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="@string/chat_proposal_reject"
+                android:textAllCaps="true"
+                android:textSize="11sp"
+                android:letterSpacing="0.08"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnProposalAccept"
+                style="@style/Widget.Foundit.Spotify.GreenPill"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="48dp"
+                android:layout_marginStart="4dp"
+                android:text="@string/chat_proposal_accept"
+                android:textSize="11sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

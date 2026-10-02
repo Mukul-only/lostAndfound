@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bare question mark, no circular background.
+     Geometry is Material Symbols Rounded "question_mark" 24px, taken from
+     fonts.gstatic.com and rescaled from its 960-unit box down to a 24x24
+     viewport (uniform scale 24/960, shifted down by 24 because the source
+     glyph lives in y = -960..0).
+     Marks the "question asked" side of a Q/A row, opposite ic_reply for the
+     answer. Tinted from the layout, like ic_reply. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 14.6 8.075 q 0 -1.075 -0.7125 -1.725 T 12 5.7 q -0.725 0 -1.3125 0.3125 T 9.675 6.925 q -0.4 0.575 -1.0875 0.6625 T 7.4 7.225 q -0.35 -0.325 -0.3875 -0.8 t 0.2375 -0.9 q 0.8 -1.2 2.0375 -1.8625 T 12 3 q 2.425 0 3.9375 1.375 T 17.45 7.975 q 0 1.125 -0.475 2.025 t -1.75 2.125 q -0.925 0.875 -1.25 1.3625 T 13.55 14.6 q -0.1 0.6 -0.5125 1 T 12.05 16 q -0.575 0 -0.9875 -0.3875 T 10.65 14.65 q 0 -0.975 0.425 -1.7875 t 1.425 -1.7125 q 1.275 -1.125 1.6875 -1.7375 T 14.6 8.075 Z M 12 22 q -0.825 0 -1.4125 -0.5875 T 10 20 q 0 -0.825 0.5875 -1.4125 T 12 18 q 0.825 0 1.4125 0.5875 T 14 20 q 0 0.825 -0.5875 1.4125 T 12 22 Z" />
+</vector>

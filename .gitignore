@@ -1,0 +1,63 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Signing material -- NEVER commit. Losing/ leaking these means a compromised
+# signing identity for every future release build.
+*.jks
+*.keystore
+keystore.properties
+
+# Gradle/ Android build output (per-module; '/build' above only covers root)
+build/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+
+# Local SDK location and secrets
+local.properties
+.env
+.env.*
+
+# Signed release binaries. These embed the real MAPS_API_KEY resolved from
+# local.properties at build time, so they must never be committed.
+*.apk
+*.aab
+app/release/
+
+# Signing material -- NEVER commit. Losing/ leaking these means a compromised
+# signing identity for every future release build.
+*.jks
+*.keystore
+keystore.properties
+
+# Gradle/ Android build output (per-module; '/build' above only covers root)
+build/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+
+# Local SDK location and secrets
+local.properties
+.env
+.env.*
+
+# Signed release binaries. These embed the real MAPS_API_KEY resolved from
+# local.properties at build time, so they must never be committed.
+*.apk
+*.aab
+app/release/
