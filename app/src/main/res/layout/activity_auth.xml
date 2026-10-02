@@ -162,6 +162,7 @@
                     android:layout_marginBottom="16dp"
                     android:hint="Password (min. 6 characters)"
                      app:passwordToggleEnabled="true"
+                     app:passwordToggleTint="@color/spotify_text2"
                      style="@style/Widget.Foundit.Spotify.TextInputLayout">
 
                     <com.example.lostandfound.ui.components.FounditTextInputEditText
