@@ -138,7 +138,12 @@ public class ReportRepository {
         // Always send FOUND-only params explicitly (null for LOST) so PostgREST matches function signature
         params.put("p_public_verification_question", report.getPublicVerificationQuestion());
         params.put("p_finder_private_notes", finderPrivateNotes);
-        params.put("p_image_url", report.getImageUrl());
+        // The RPC declares p_image_url without a default, so the key must be
+        // present or PostgREST cannot match the signature. Gson omits null map
+        // values, which silently dropped it for photo-less reports (PGRST202).
+        // An empty string is stored instead of NULL; getPublicImageUrl maps ""
+        // back to null, so every caller already treats the two alike.
+        params.put("p_image_url", report.getImageUrl() == null ? "" : report.getImageUrl());
         params.put("p_campus_location", report.getCampusLocation());
         params.put("p_incident_date", report.getIncidentDate());
         params.put("p_incident_time_approx", report.getIncidentTimeApprox());
