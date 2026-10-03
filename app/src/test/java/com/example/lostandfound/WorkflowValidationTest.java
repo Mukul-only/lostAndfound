@@ -636,16 +636,22 @@ public class WorkflowValidationTest {
 
     @Test
     public void testAvatarPathAndPayloadFields() {
-        // Fixed per-user path: replacements overwrite, never orphan files
-        assertEquals("user-123/avatar.jpg", ProfileUtils.avatarPathFor("user-123"));
-        assertEquals(ProfileUtils.AVATAR_FILE_NAME, "avatar.jpg");
+        // Unique per upload: a fixed key reuses the same public URL, so Glide and
+        // the CDN keep serving the previous photo and edits appear not to apply.
+        assertEquals("user-123/avatar-v1.jpg", ProfileUtils.avatarPathFor("user-123", "v1"));
+        // Two uploads by the same user must not collide, or the cache bug returns.
+        assertNotEquals(ProfileUtils.avatarPathFor("user-123"),
+                        ProfileUtils.avatarPathFor("user-123"));
 
         // PATCH body for profile updates carries only profile-owned fields
         Map<String, Object> fields = new HashMap<>();
         fields.put("full_name", "Ada Lovelace");
-        fields.put("avatar_url", ProfileUtils.avatarPathFor("user-123"));
+        String avatarPath = ProfileUtils.avatarPathFor("user-123");
+        fields.put("avatar_url", avatarPath);
         assertEquals("Ada Lovelace", fields.get("full_name"));
-        assertEquals("user-123/avatar.jpg", fields.get("avatar_url"));
+        // The generated path is versioned per upload, so assert the body carries
+        // it rather than pinning a literal that would re-encode the old contract.
+        assertEquals(avatarPath, fields.get("avatar_url"));
         assertFalse("Email must never be part of a profile update", fields.containsKey("email"));
         assertFalse("Owner/permission fields must never be client-set", fields.containsKey("owner_id"));
     }

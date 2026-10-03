@@ -6,6 +6,8 @@ package com.example.lostandfound.util;
  * Fixed path (<uid>/avatar.jpg) + server-side upsert means replacing a
  * photo overwrites in place and never accumulates orphaned uploads.
  */
+import java.util.UUID;
+
 public final class ProfileUtils {
 
     private ProfileUtils() {}
@@ -15,7 +17,7 @@ public final class ProfileUtils {
 
     public static final int AVATAR_MAX_DIMENSION_PX = 512;
     public static final int AVATAR_JPEG_QUALITY = 80;
-    public static final String AVATAR_FILE_NAME = "avatar.jpg";
+    public static final String AVATAR_FILE_PREFIX = "avatar-";
     public static final String AVATAR_CONTENT_TYPE = "image/jpeg";
 
     /**
@@ -38,10 +40,28 @@ public final class ProfileUtils {
 
 
     /**
-     * Fixed storage path for a user's avatar. Same path on every upload so
-     * replacements overwrite instead of creating new objects.
+     * Storage path for a user's avatar, unique per upload.
+     *
+     * <p>This used to be a fixed {@code <uid>/avatar.jpg} so replacements would
+     * overwrite rather than accumulate. That broke photo updates: overwriting
+     * leaves the public URL byte-identical, so both Glide (keyed by URL) and the
+     * storage CDN kept serving the previous image, and the new photo only appeared
+     * after a cache-cold restart. Varying the filename changes the URL, which
+     * busts both caches at once and needs no migration.
+     *
+     * <p>The trade-off is that superseded avatars are left in the bucket instead
+     * of being overwritten; each upload adds one small object. Deleting the
+     * previous object after a successful save would remove that, which needs a
+     * storage DELETE call that does not exist yet.
      */
     public static String avatarPathFor(String userId) {
-        return userId + "/" + AVATAR_FILE_NAME;
+        // UUID, not a timestamp: two uploads inside the same millisecond would
+        // otherwise collide and silently reintroduce the stale-image bug.
+        return avatarPathFor(userId, UUID.randomUUID().toString());
+    }
+
+    /** Deterministic overload so the versioning scheme is directly testable. */
+    public static String avatarPathFor(String userId, String version) {
+        return userId + "/" + AVATAR_FILE_PREFIX + version + ".jpg";
     }
 }
