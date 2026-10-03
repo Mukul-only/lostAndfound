@@ -39,8 +39,15 @@ public class IncidentTimeFutureTest {
 
     @Test
     public void timeLaterToday_isFuture() {
+        // Uses a fixed late time rather than an offset: now+120min wraps past
+        // midnight after 22:00 and lands on a time EARLIER than now, which made
+        // this case fail for an hour a day even though the code was right.
+        Calendar now = Calendar.getInstance();
+        if (now.get(Calendar.HOUR_OF_DAY) == 23 && now.get(Calendar.MINUTE) >= 58) {
+            return; // no later time exists today, so the premise does not hold
+        }
         assertTrue("a time later today must be rejected",
-                DateUtils.isFutureDateTime(isoDate(0), time(120)));
+                DateUtils.isFutureDateTime(isoDate(0), "23:59"));
     }
 
     @Test
