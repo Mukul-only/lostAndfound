@@ -9,6 +9,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import com.example.lostandfound.BuildConfig;
+import com.example.lostandfound.data.model.AuthUser;
 import com.example.lostandfound.data.model.Profile;
 import com.example.lostandfound.data.remote.SessionManager;
 import com.example.lostandfound.data.remote.SupabaseClient;
@@ -48,28 +49,214 @@ public class ProfileRepository {
         this.sessionManager = SessionManager.getInstance(context);
     }
 
+    /**
+     * Outcome of a profiles read, kept three-way on purpose: an
+     * HTTP 2xx is <b>not</b> a loaded profile. PostgREST answers a SELECT that
+     * matches nothing visible with {@code 200} and an empty array, so success
+     * and "a row came back" are different facts and callers must handle them
+     * differently.
+     */
+    public enum ProfileReadOutcome {
+        /** HTTP 2xx and the body holds at least one non-null row. */
+        LOADED,
+        /** HTTP 2xx but the body is null, empty, or holds no row. */
+        NO_VISIBLE_PROFILE,
+        /** Any non-2xx status. */
+        HTTP_ERROR
+    }
+
+    /** Whether a profile operation may proceed with the caller's session. */
+    public enum AuthGate {
+        PROCEED,
+        SIGN_IN_REQUIRED
+    }
+
+    /** Whether the id in local storage is the id the backend authenticated. */
+    public enum IdentityVerdict {
+        MATCH,
+        MISMATCH
+    }
+
+    /** Whether a PATCH response confirms the row changed. */
+    public enum PatchOutcome {
+        /** 2xx with a representation row: at least one row was affected. */
+        CONFIRMED,
+        /** 2xx with no representation: applied to an unknown number of rows. */
+        NEEDS_READ,
+        /** Non-2xx: the write did not apply. */
+        FAILED
+    }
+
+    /**
+     * Gate every profile read and write on a usable session. Without this, a
+     * dead or absent token degrades silently: the interceptor sends only the
+     * publishable key, PostgREST treats the caller as {@code anon}, the
+     * {@code TO authenticated} SELECT policy matches nothing, and the app
+     * reports a confusing empty 200 instead of asking for sign-in.
+     */
+    public static AuthGate gateSession(String storedUserId, String accessToken) {
+        if (storedUserId == null || storedUserId.trim().isEmpty()
+                || accessToken == null || accessToken.trim().isEmpty()) {
+            return AuthGate.SIGN_IN_REQUIRED;
+        }
+        return AuthGate.PROCEED;
+    }
+
+    /**
+     * Compares the locally stored user id with the id the backend
+     * authenticated for this session. Null-safe: anything but two equal
+     * non-blank ids is a mismatch.
+     */
+    public static IdentityVerdict checkIdentity(String storedUserId, String authenticatedUserId) {
+        if (storedUserId != null && !storedUserId.trim().isEmpty()
+                && storedUserId.equals(authenticatedUserId)) {
+            return IdentityVerdict.MATCH;
+        }
+        return IdentityVerdict.MISMATCH;
+    }
+
+    /**
+     * Repair (creating the caller's row) is only ever legitimate with a gated
+     * session whose stored id the backend confirms. Otherwise the row lookup
+     * itself is untrustworthy and writing would be a guess.
+     */
+    public static boolean shouldAttemptRepair(AuthGate gate, IdentityVerdict identity) {
+        return gate == AuthGate.PROCEED && identity == IdentityVerdict.MATCH;
+    }
+
+    /**
+     * Classifies one profiles read. Pure function, so the three cases are
+     * unit-testable without network.
+     *
+     * <p>Conversion failures never reach here: if the JSON does not match
+     * {@code List<Profile>}, Retrofit delivers the exception to
+     * {@code onFailure}, not to {@code onResponse}. A 200 that lands here
+     * parsed fine; only the row itself may be absent.
+     */
+    public static ProfileReadOutcome classifyProfileRead(Response<List<Profile>> response) {
+        if (response == null || !response.isSuccessful()) {
+            return ProfileReadOutcome.HTTP_ERROR;
+        }
+        List<Profile> body = response.body();
+        if (body == null || body.isEmpty() || body.get(0) == null) {
+            return ProfileReadOutcome.NO_VISIBLE_PROFILE;
+        }
+        return ProfileReadOutcome.LOADED;
+    }
+
+    /**
+     * Classifies one PATCH response. Only a representation row proves the write
+     * affected a row: a 2xx with an empty body is equally a 204 with the
+     * representation dropped and a filter that matched zero rows, so it must
+     * never be reported as saved.
+     */
+    public static PatchOutcome classifyPatchOutcome(Response<List<Profile>> response) {
+        if (response == null || !response.isSuccessful()) {
+            return PatchOutcome.FAILED;
+        }
+        return classifyProfileRead(response) == ProfileReadOutcome.LOADED
+                ? PatchOutcome.CONFIRMED
+                : PatchOutcome.NEEDS_READ;
+    }
+
+    /**
+     * Whether a re-read row reflects the edit just sent. {@code sentAvatarUrl}
+     * is null when the PATCH did not include an avatar, in which case only the
+     * name is compared.
+     */
+    public static boolean rowReflectsEdit(Profile row, String sentFullName, String sentAvatarUrl) {
+        if (row == null) {
+            return false;
+        }
+        if (sentFullName != null && !sentFullName.equals(row.getFullName())) {
+            return false;
+        }
+        if (sentAvatarUrl != null) {
+            String rowAvatar = row.getAvatarUrl();
+            if (rowAvatar == null || !sentAvatarUrl.equals(rowAvatar)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * A 401 that reaches a profile callback survived transparent refresh (the
+     * interceptor refreshes proactively and the authenticator retries once), so
+     * the session is dead: say so explicitly instead of a bare status code.
+     */
+    public static String expiredOrCoded(String codedMessage, int code) {
+        if (code == 401) {
+            return "Session expired. Please sign in again.";
+        }
+        return codedMessage;
+    }
+
+    /** Exact wording for a write the server accepted but whose row never became visible. */
+    public static final String MSG_SAVED_NOT_RELOADED = "Profile saved, but could not reload it";
+
+    /**
+     * Safe diagnostics only: booleans, statuses and counts. Never tokens, ids,
+     * names or photo references.
+     */
+    private void logProfileDecision(String detail) {
+        if (BuildConfig.DEBUG) {
+            Log.d("ProfileRepository", detail);
+        }
+    }
+
+    /**
+     * Maps a Retrofit failure to a message, keeping transport problems apart
+     * from conversion problems. Retrofit routes {@link IOException} (dropped
+     * connection, timeout, DNS) <i>and</i> converter exceptions (the JSON did
+     * not match the model, e.g. Gson's runtime exceptions) to the same
+     * {@code onFailure}; only the former is a network error.
+     */
+    public static String readFailureMessage(Throwable t) {
+        String detail = (t == null || t.getLocalizedMessage() == null) ? "" : t.getLocalizedMessage();
+        if (t instanceof IOException) {
+            return "Network error: " + detail;
+        }
+        return "Unexpected error: " + detail;
+    }
+
+    private void enqueueMyProfileRead(String userId, Callback<List<Profile>> callback) {
+        client.getRestService().getProfiles("*", "eq." + userId).enqueue(callback);
+    }
+
     public void fetchMyProfile(DataCallback<Profile> callback) {
         String userId = sessionManager.getUserId();
-        if (userId == null) {
+        if (gateSession(userId, sessionManager.getAccessToken()) != AuthGate.PROCEED) {
+            logProfileDecision("fetch gated: no usable session");
             callback.onError("User not signed in");
             return;
         }
 
-        client.getRestService().getProfiles("*", "eq." + userId).enqueue(new Callback<List<Profile>>() {
+        enqueueMyProfileRead(userId, new Callback<List<Profile>>() {
             @Override
             public void onResponse(Call<List<Profile>> call, Response<List<Profile>> response) {
-                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                if (classifyProfileRead(response) == ProfileReadOutcome.LOADED) {
                     Profile profile = response.body().get(0);
+
                     sessionManager.saveProfile(profile);
+                    ProfileDirectory.getInstance().put(profile);
                     callback.onSuccess(profile);
-                } else {
-                    callback.onError("Could not load profile. Code: " + response.code());
+                    return;
                 }
+                if (classifyProfileRead(response) == ProfileReadOutcome.HTTP_ERROR) {
+                    callback.onError(expiredOrCoded(
+                            "Could not load profile. Code: " + response.code(), response.code()));
+                    return;
+                }
+                // HTTP 200 but no row visible with a gated session: either the row
+                // is absent or the stored id is stale. Verify before repairing.
+                // Pure read, so no edit fields travel with the repair.
+                resolveAbsentRow(userId, null, null, callback);
             }
 
             @Override
             public void onFailure(Call<List<Profile>> call, Throwable t) {
-                callback.onError("Network error: " + t.getLocalizedMessage());
+                callback.onError(readFailureMessage(t));
             }
         });
     }
@@ -82,7 +269,8 @@ public class ProfileRepository {
      */
     public void saveProfile(String displayName, byte[] avatarBytes, DataCallback<Profile> callback) {
         String userId = sessionManager.getUserId();
-        if (userId == null) {
+        if (gateSession(userId, sessionManager.getAccessToken()) != AuthGate.PROCEED) {
+            logProfileDecision("save gated: no usable session");
             callback.onError("User not signed in");
             return;
         }
@@ -115,7 +303,13 @@ public class ProfileRepository {
                 .enqueue(new Callback<List<Profile>>() {
                     @Override
                     public void onResponse(Call<List<Profile>> call, Response<List<Profile>> response) {
-                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                        if (!response.isSuccessful()) {
+                            callback.onError(expiredOrCoded(
+                                    failedSaveMessage("Failed to save profile.", response),
+                                    response.code()));
+                            return;
+                        }
+                        if (classifyPatchOutcome(response) == PatchOutcome.CONFIRMED) {
                             Profile updated = response.body().get(0);
                             sessionManager.saveProfile(updated);
                             // ProfileDirectory caches every profile by id and never
@@ -126,22 +320,188 @@ public class ProfileRepository {
                             // authoritative row straight into the cache.
                             ProfileDirectory.getInstance().put(updated);
                             callback.onSuccess(updated);
-                        } else {
-                            String error = "Failed to save profile.";
-                            try {
-                                if (response.errorBody() != null) {
-                                    error = response.errorBody().string();
-                                }
-                            } catch (Exception ignored) {}
-                            callback.onError(error);
+                            return;
                         }
+                        // PATCH accepted but returned no representation: the write may
+                        // have applied or matched zero rows. Follow with a single read
+                        // and confirm there; never re-PATCH here.
+                        confirmSaveWithRead(userId, displayName, avatarPath, callback);
                     }
 
                     @Override
                     public void onFailure(Call<List<Profile>> call, Throwable t) {
-                        callback.onError("Network error: " + t.getLocalizedMessage());
+                        callback.onError(readFailureMessage(t));
                     }
                 });
+    }
+
+    /**
+     * Confirms an unconfirmed PATCH with one read. {@code sentAvatarUrl} is null
+     * when the PATCH did not include an avatar, in which case only the name is
+     * compared.
+     */
+    private void confirmSaveWithRead(String userId, final String sentFullName,
+                                     final String sentAvatarUrl, final DataCallback<Profile> callback) {
+        enqueueMyProfileRead(userId, new Callback<List<Profile>>() {
+            @Override
+            public void onResponse(Call<List<Profile>> call, Response<List<Profile>> response) {
+                ProfileReadOutcome outcome = classifyProfileRead(response);
+                if (outcome == ProfileReadOutcome.HTTP_ERROR) {
+                    callback.onError(expiredOrCoded(MSG_SAVED_NOT_RELOADED
+                            + " (HTTP " + response.code() + ")", response.code()));
+                    return;
+                }
+                if (outcome == ProfileReadOutcome.LOADED
+                        && rowReflectsEdit(response.body().get(0), sentFullName, sentAvatarUrl)) {
+                    Profile profile = response.body().get(0);
+                    sessionManager.saveProfile(profile);
+                    ProfileDirectory.getInstance().put(profile);
+                    callback.onSuccess(profile);
+                    return;
+                }
+                // Either no row is visible or it does not carry the edit:
+                // the PATCH may have matched zero rows. Verify identity, then
+                // repair through the authorized creation path if appropriate.
+                resolveAbsentRow(userId, sentFullName, sentAvatarUrl, callback);
+            }
+
+            @Override
+            public void onFailure(Call<List<Profile>> call, Throwable t) {
+                callback.onError(MSG_SAVED_NOT_RELOADED);
+            }
+        });
+    }
+
+    /**
+     * Decides what an absent row means. Runs only with a gated session: the
+     * locally stored id is compared against the id the backend authenticated,
+     * because a dead token degrades to an anonymous request whose empty 200
+     * would otherwise look like a missing row.
+     *
+     * @param editFullName  the name the save tried to write, or null on pure reads
+     * @param editAvatarUrl the avatar the save tried to write, or null when the
+     *                      save did not include one (read flows always pass null)
+     */
+    private void resolveAbsentRow(final String userId, final String editFullName,
+                                 final String editAvatarUrl, final DataCallback<Profile> callback) {
+        logProfileDecision("read empty with gated session: verifying identity");
+        client.getAuthService().getCurrentUser().enqueue(new Callback<AuthUser>() {
+            @Override
+            public void onResponse(Call<AuthUser> call, Response<AuthUser> response) {
+                AuthUser authUser = (response.isSuccessful() && response.body() != null)
+                        ? response.body() : null;
+                String authenticatedId = authUser != null ? authUser.getId() : null;
+                boolean idsMatch = checkIdentity(userId, authenticatedId) == IdentityVerdict.MATCH;
+                logProfileDecision("identity check: idsMatch=" + idsMatch
+                        + " status=" + response.code());
+                if (!idsMatch) {
+                    // Stale account state: the stored id is not the authenticated
+                    // identity. Correct it the same way sign-out does, then
+                    // require a fresh sign-in.
+                    sessionManager.clearSession();
+                    ProfileDirectory.getInstance().clear();
+                    callback.onError("User not signed in");
+                    return;
+                }
+                repairMissingRow(userId, editFullName, editAvatarUrl, callback);
+            }
+
+            @Override
+            public void onFailure(Call<AuthUser> call, Throwable t) {
+                callback.onError(expiredOrCoded(
+                        "Could not verify account. Code: -1", -1));
+            }
+        });
+    }
+
+    /**
+     * Creates the caller's missing row through the same authorized idempotent
+     * path sign-up uses (upsert with merge-duplicates, RLS still enforcing
+     * ownership server-side). Runs only after identity is confirmed, and only
+     * ever for the authenticated user's own id, so it cannot overwrite another
+     * profile. On a save flow {@code editFullName}/{@code editAvatarUrl} carry
+     * the pending edit; on a pure read they are the session name and null, so
+     * no avatar is ever touched.
+     */
+    private void repairMissingRow(String userId, String editFullName, String editAvatarUrl,
+                                 final DataCallback<Profile> callback) {
+        String fullName = editFullName != null ? editFullName : sessionManager.getDisplayName();
+        if (fullName == null || fullName.trim().length() < 2) {
+            callback.onError(MSG_SAVED_NOT_RELOADED);
+            return;
+        }
+        Profile repair = new Profile(userId, fullName.trim());
+        if (editAvatarUrl != null) {
+            repair.setAvatarUrl(editAvatarUrl);
+        }
+        client.getRestService().upsertProfile("resolution=merge-duplicates", repair)
+                .enqueue(new Callback<List<Profile>>() {
+                    @Override
+                    public void onResponse(Call<List<Profile>> call, Response<List<Profile>> response) {
+                        if (!response.isSuccessful()) {
+                            callback.onError(expiredOrCoded(
+                                    "Could not save profile. (HTTP " + response.code() + ")",
+                                    response.code()));
+                            return;
+                        }
+                        if (classifyProfileRead(response) == ProfileReadOutcome.LOADED) {
+                            Profile profile = response.body().get(0);
+                            sessionManager.saveProfile(profile);
+                            ProfileDirectory.getInstance().put(profile);
+                            callback.onSuccess(profile);
+                            return;
+                        }
+                        // Upsert accepted but the row still is not visible.
+                        reloadAfterRepair(callback);
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Profile>> call, Throwable t) {
+                        callback.onError(readFailureMessage(t));
+                    }
+                });
+    }
+
+    /** One final read after a repair upsert; the row should exist by now. */
+    private void reloadAfterRepair(final DataCallback<Profile> callback) {
+        final String userId = sessionManager.getUserId();
+        if (gateSession(userId, sessionManager.getAccessToken()) != AuthGate.PROCEED) {
+            callback.onError("User not signed in");
+            return;
+        }
+        enqueueMyProfileRead(userId, new Callback<List<Profile>>() {
+            @Override
+            public void onResponse(Call<List<Profile>> call, Response<List<Profile>> response) {
+                if (classifyProfileRead(response) == ProfileReadOutcome.LOADED) {
+                    Profile profile = response.body().get(0);
+                    sessionManager.saveProfile(profile);
+                    ProfileDirectory.getInstance().put(profile);
+                    callback.onSuccess(profile);
+                } else {
+                    callback.onError(expiredOrCoded(
+                            "Could not save profile. (HTTP " + response.code() + ")",
+                            response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Profile>> call, Throwable t) {
+                callback.onError(readFailureMessage(t));
+            }
+        });
+    }
+
+    private String failedSaveMessage(String prefix, Response<List<Profile>> response) {
+        String message = prefix + " (HTTP " + response.code() + ")";
+        try {
+            if (response.errorBody() != null) {
+                String raw = response.errorBody().string();
+                if (raw != null && !raw.trim().isEmpty()) {
+                    message = raw;
+                }
+            }
+        } catch (Exception ignored) {}
+        return message;
     }
 
     /** Clears the caller's profile photo.
@@ -159,7 +519,8 @@ public class ProfileRepository {
      *  deleting it needs a storage DELETE call that does not exist yet. */
     public void removeAvatar(DataCallback<Profile> callback) {
         String userId = sessionManager.getUserId();
-        if (userId == null) {
+        if (gateSession(userId, sessionManager.getAccessToken()) != AuthGate.PROCEED) {
+            logProfileDecision("remove gated: no usable session");
             callback.onError("User not signed in");
             return;
         }
@@ -171,7 +532,17 @@ public class ProfileRepository {
                 .enqueue(new Callback<List<Profile>>() {
                     @Override
                     public void onResponse(Call<List<Profile>> call, Response<List<Profile>> response) {
-                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                        PatchOutcome outcome = classifyPatchOutcome(response);
+                        if (outcome == PatchOutcome.FAILED) {
+                            callback.onError(expiredOrCoded(
+                                    failedSaveMessage("Failed to remove photo.", response),
+                                    response.code()));
+                            return;
+                        }
+                        // The PATCH accepted, so the column now holds "" regardless of
+                        // whether a representation came back.
+                        sessionManager.clearAvatarPath();
+                        if (outcome == PatchOutcome.CONFIRMED) {
                             Profile updated = response.body().get(0);
                             sessionManager.saveProfile(updated);
                             // Belt and braces: an empty avatar_url would not clear
@@ -179,20 +550,16 @@ public class ProfileRepository {
                             sessionManager.clearAvatarPath();
                             ProfileDirectory.getInstance().put(updated);
                             callback.onSuccess(updated);
-                        } else {
-                            String error = "Failed to remove photo.";
-                            try {
-                                if (response.errorBody() != null) {
-                                    error = response.errorBody().string();
-                                }
-                            } catch (Exception ignored) {}
-                            callback.onError(error);
+                            return;
                         }
+                        // Removal sends avatar_url="" and no name, so only the
+                        // avatar is compared on the follow-up read.
+                        confirmSaveWithRead(userId, null, "", callback);
                     }
 
                     @Override
                     public void onFailure(Call<List<Profile>> call, Throwable t) {
-                        callback.onError("Network error: " + t.getLocalizedMessage());
+                        callback.onError(readFailureMessage(t));
                     }
                 });
     }
