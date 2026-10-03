@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Email verified &middot; Foundit</title>
+<!--
+  Supabase email-confirmation landing page.
+
+  Why this exists
+    Supabase sends the confirmation link to the redirect URL configured under
+    Authentication -> URL Configuration. Left at the default it uses
+    http://localhost:3000 (Supabase Studio's local address), which no phone can
+    reach, so tapping the emailed link produced "site can't be reached". Point
+    the redirect URL at wherever this file is hosted.
+
+  Security
+    The auth flow here is implicit, so the link carries #access_token and
+    #refresh_token in the URL fragment. This page deliberately:
+      - loads nothing from any third party (no CDN, no fonts, no analytics), so
+        nothing else can read those tokens;
+      - strips the fragment from the address bar immediately, so the tokens are
+        not left sitting in visible history or a shared screenshot;
+      - never transmits them anywhere. The user simply returns to the app and
+        signs in with email and password.
+
+    Keeping this file dependency-free is a security requirement, not a
+    preference. Do not add analytics, fonts or CDNs to it.
+-->
+<style>
+  /* DESIGN.md: near-black immersion, achromatic UI, green reserved for CTAs. */
+  :root {
+    --bg: #121212;
+    --surface: #181818;
+    --surface-2: #1f1f1f;
+    --text: #ffffff;
+    --text-2: #b3b3b3;
+    --green: #1ed760;
+    --border: #4d4d4d;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    /* DESIGN.md type: system stack standing in for SpotifyMixUI */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--surface);
+    border-radius: 8px;                 /* Comfortable (8px): sections, dialogs */
+    padding: 32px 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);  /* Heavy: dialogs, overlays */
+  }
+  .mark {
+    width: 56px; height: 56px;
+    margin: 0 auto 20px;
+    border-radius: 50%;                 /* Circle: icons */
+    background: rgba(30, 215, 96, 0.12);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mark svg { width: 28px; height: 28px; }
+  h1 {
+    margin: 0 0 10px;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+  }
+  p {
+    margin: 0 0 14px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-2);
+    text-align: center;
+  }
+  .cta {
+    display: block;
+    width: 100%;
+    margin-top: 22px;
+    padding: 13px 16px;
+    background: var(--green);
+    color: #000000;
+    border: 0;
+    border-radius: 9999px;              /* Pill: primary buttons */
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    cursor: pointer;
+  }
+  .note {
+    margin: 18px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-2);
+  }
+  code {
+    background: var(--surface-2);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 11px;
+    word-break: break-all;
+  }
+</style>
+</head>
+<body>
+  <main class="card" role="main">
+    <div class="mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1ed760" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6 9 17l-5-5"/>
+      </svg>
+    </div>
+
+    <h1 id="title">Email verified</h1>
+    <p id="body">
+      Your email address is confirmed. Return to the Foundit app and sign in
+      with your email address and password.
+    </p>
+
+    <button class="cta" id="open" type="button">Open Foundit</button>
+
+    <p class="note">
+      Already have the app installed? Close this page and launch it from your
+      home screen.
+      <span id="detail"></span>
+    </p>
+  </main>
+
+<script>
+(function () {
+  "use strict";
+
+  // Supabase sends #access_token / #error_description on this page.
+  var fragment = window.location.hash || "";
+  var failed = false, reason = "";
+
+  if (fragment) {
+    if (fragment.indexOf("error") !== -1) {
+      failed = true;
+      var m = /error_description=([^&]+)/.exec(fragment);
+      if (m) { reason = decodeURIComponent(m[1].replace(/\+/g, " ")); }
+    }
+    // Strip the tokens from the address bar before anything else can read
+    // them, and so they are not left in visible history.
+    try {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    } catch (e) { /* replaceState can be blocked; not fatal */ }
+  }
+
+  var title = document.getElementById("title");
+  var body = document.getElementById("body");
+
+  if (failed) {
+    title.textContent = "That link did not work";
+    body.textContent = "This confirmation link is invalid or has expired. "
+      + "Open the Foundit app and sign up again to receive a new one."
+      + (reason ? " (" + reason + ")" : "");
+  } else if (!fragment) {
+    title.textContent = "Foundit";
+    body.textContent = "Your email address is confirmed. Return to the Foundit app "
+      + "and sign in with your email address and password.";
+  }
+
+  // No intent-filter is registered for a custom scheme yet, so a deep link
+  // would fail. Try it anyway and fall back to telling the user, which is the
+  // only path that works until the app declares one.
+  document.getElementById("open").addEventListener("click", function () {
+    var opened = false;
+    try {
+      opened = window.location.href = "foundit://auth-callback";
+    } catch (e) { opened = false; }
+    setTimeout(function () {
+      if (!opened) {
+        document.getElementById("detail").innerHTML =
+          "<br><br>Could not open the app automatically. Please launch it from "
+          + "your home screen.";
+      }
+    }, 1200);
+  });
+})();
+</script>
+</body>
+</html>
