@@ -14,19 +14,12 @@
         android:gravity="center_horizontal">
 
         <!-- Campus Brand Header -->
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginTop="32dp"
-            android:src="@drawable/ic_shield"
-            app:tint="@color/spotify_green"
-            android:contentDescription="Campus Shield" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Campus Lost &amp; Found"
+            android:layout_marginTop="32dp"
+            android:text="Lost &amp; Found"
             android:textColor="@color/spotify_text"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -123,7 +116,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                     android:hint="Full Name (Student Name)"
+                     android:hint="Full Name"
                      android:visibility="gone"
                      style="@style/Widget.Foundit.Spotify.TextInputLayout">
 
@@ -142,7 +135,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                     android:hint="Campus Email Address"
+                     android:hint="Email Address"
                      style="@style/Widget.Foundit.Spotify.TextInputLayout">
 
                     <com.example.lostandfound.ui.components.FounditTextInputEditText
@@ -190,7 +183,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                      android:layout_marginBottom="12dp"
-                     android:textColor="@color/spotify_info"
+                     android:textColor="@color/spotify_text2"
                     android:textSize="13sp"
                     android:visibility="gone" />
 
