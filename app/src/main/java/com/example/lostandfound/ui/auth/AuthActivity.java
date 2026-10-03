@@ -89,9 +89,14 @@ public class AuthActivity extends AppCompatActivity {
                     public void onSuccess(boolean emailConfirmationRequired) {
                         setLoading(false);
                         if (emailConfirmationRequired) {
-                            binding.tvEmailNotice.setText("Account created! If email confirmation is enabled on your Supabase project, please check your inbox to confirm before signing in.");
-                            binding.tvEmailNotice.setVisibility(View.VISIBLE);
+                            // Select the tab before revealing the notice: onTabSelected hides
+                            // tvEmailNotice, so showing it first meant the switch wiped it
+                            // immediately and the user saw a bare Sign In tab with no explanation.
                             binding.tabLayoutAuth.getTabAt(0).select();
+                            binding.tvEmailNotice.setText(
+                                    "Account created! Check your inbox to confirm your email address,"
+                                            + " then sign in.");
+                            binding.tvEmailNotice.setVisibility(View.VISIBLE);
                         } else {
                             navigateToMain();
                         }
