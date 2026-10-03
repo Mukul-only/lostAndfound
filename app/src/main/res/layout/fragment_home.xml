@@ -210,18 +210,47 @@
                 android:nestedScrollingEnabled="false"
                 android:orientation="horizontal" />
 
-            <!-- Report feed header + functional-green filters -->
-            <TextView
+            <!-- Report feed header: title plus a reload action that stays usable
+                 in empty and error states. The spinner swaps in for the button
+                 while a manual reload is in flight. -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingEnd="8dp"
                 android:paddingTop="20dp"
-                android:paddingBottom="8dp"
-                android:text="@string/home_recent_header"
-                android:textAppearance="@style/TextAppearance.Foundit.Spotify.FeatureHeading"
-                android:maxLines="1"
-                android:ellipsize="end" />
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/home_recent_header"
+                    android:textAppearance="@style/TextAppearance.Foundit.Spotify.FeatureHeading"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <ImageButton
+                    android:id="@+id/btnReloadReports"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_icon_button_ripple"
+                    android:padding="13dp"
+                    android:src="@drawable/ic_refresh"
+                    app:tint="@color/spotify_text2"
+                    android:contentDescription="@string/content_description_reload_reports" />
+
+                <ProgressBar
+                    android:id="@+id/progressReload"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="13dp"
+                    android:indeterminateTint="@color/spotify_green"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
             <HorizontalScrollView
                 android:layout_width="match_parent"

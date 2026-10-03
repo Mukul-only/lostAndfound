@@ -21,8 +21,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.lostandfound.MainActivity;
 import com.example.lostandfound.R;
 import com.example.lostandfound.data.model.Report;
+import com.example.lostandfound.data.repository.AuthRepository;
 import com.example.lostandfound.data.repository.ReportRepository;
 import com.example.lostandfound.databinding.FragmentHomeBinding;
+import com.example.lostandfound.ui.auth.AuthActivity;
+import com.example.lostandfound.ui.common.ReloadTracker;
 import com.example.lostandfound.ui.report.ReportDetailActivity;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +35,8 @@ import java.util.List;
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private ReportRepository reportRepository;
+    private AuthRepository authRepository;
+    private final ReloadTracker reloadTracker = new ReloadTracker();
     private HomeReportAdapter adapter;
     private CategoryChipAdapter categoryAdapter;
 
@@ -50,6 +55,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         reportRepository = new ReportRepository(requireContext());
+        authRepository = new AuthRepository(requireContext());
 
         setupInsets();
         setupRecyclerView();
@@ -59,6 +65,7 @@ public class HomeFragment extends Fragment {
         setupAvatarClick();
         setupReportActions();
         setupRetry();
+        setupReload();
         loadReports();
     }
 
@@ -139,14 +146,14 @@ public class HomeFragment extends Fragment {
             public void onCategoryClick(String categoryKey, String categoryLabel) {
                 selectedCategory = categoryKey;
                 binding.tvClearCategoryFilter.setVisibility(View.VISIBLE);
-                loadReports();
+                loadReportsForNewFilters();
             }
 
             @Override
             public void onClearFilter() {
                 selectedCategory = "ALL";
                 binding.tvClearCategoryFilter.setVisibility(View.GONE);
-                loadReports();
+                loadReportsForNewFilters();
             }
         });
 
@@ -168,7 +175,7 @@ public class HomeFragment extends Fragment {
             } else if (checkedId == R.id.chipFilterStillLost) {
                 currentFilter = "STILL_LOST";
             }
-            loadReports();
+            loadReportsForNewFilters();
         });
     }
 
@@ -237,11 +244,50 @@ public class HomeFragment extends Fragment {
         binding.btnHomeRetry.setOnClickListener(v -> loadReports());
     }
 
+    private void setupReload() {
+        binding.btnReloadReports.setOnClickListener(v -> reloadReports());
+    }
+
     private void loadReports() {
+        fetchReports(false, false);
+    }
+
+    /**
+     * Manual reload from the heading button. A tap while a load is in flight
+     * is dropped, never queued behind it.
+     */
+    private void reloadReports() {
+        fetchReports(true, false);
+    }
+
+    /**
+     * Reload after the filters changed. The parameters changed, so any
+     * in-flight response is obsolete and is superseded rather than awaited.
+     */
+    private void loadReportsForNewFilters() {
+        fetchReports(false, true);
+    }
+
+    private void fetchReports(boolean manual, boolean force) {
         if (binding == null) return;
-        binding.progressHome.setVisibility(View.VISIBLE);
-        binding.layoutHomeEmpty.setVisibility(View.GONE);
-        binding.layoutHomeError.setVisibility(View.GONE);
+        if (force) {
+            reloadTracker.forceStart();
+        } else if (!reloadTracker.tryStart()) {
+            return;
+        }
+        final int requestId = reloadTracker.currentId();
+
+        if (manual) {
+            // The list stays exactly as it is until the response lands; only
+            // the heading spinner signals the reload.
+            binding.progressReload.setVisibility(View.VISIBLE);
+            binding.btnReloadReports.setVisibility(View.GONE);
+            binding.layoutHomeError.setVisibility(View.GONE);
+        } else {
+            binding.progressHome.setVisibility(View.VISIBLE);
+            binding.layoutHomeEmpty.setVisibility(View.GONE);
+            binding.layoutHomeError.setVisibility(View.GONE);
+        }
 
         String type = "ALL";
         String category = selectedCategory.equals("ALL") ? "ALL" : selectedCategory;
@@ -255,32 +301,13 @@ public class HomeFragment extends Fragment {
         reportRepository.getReports(type, category, "ALL", null, new ReportRepository.DataCallback<List<Report>>() {
             @Override
             public void onSuccess(List<Report> reports) {
-                if (!isAdded() || binding == null) return;
+                if (!isAdded() || binding == null || !reloadTracker.isCurrent(requestId)) return;
+                reloadTracker.finish();
                 binding.progressHome.setVisibility(View.GONE);
+                binding.progressReload.setVisibility(View.GONE);
+                binding.btnReloadReports.setVisibility(View.VISIBLE);
 
-                List<Report> filteredReports = new ArrayList<>();
-                if (reports != null) {
-                    if (currentFilter.equals("FOUND_RECENTLY")) {
-                        Calendar cal = Calendar.getInstance();
-                        cal.add(Calendar.DAY_OF_YEAR, -7);
-                        Date cutoff = cal.getTime();
-                        for (Report r : reports) {
-                            if (r.isFound()) {
-                                try {
-                                    Date incidentDate = com.example.lostandfound.util.DateUtils.parseIsoDate(r.getIncidentDate());
-                                    if (incidentDate != null && incidentDate.after(cutoff)) {
-                                        filteredReports.add(r);
-                                    }
-                                } catch (Exception e) {
-                                    filteredReports.add(r);
-                                }
-                            }
-                        }
-                    } else {
-                        filteredReports.addAll(reports);
-                    }
-                }
-
+                List<Report> filteredReports = applyClientFilter(reports, currentFilter, new Date());
                 if (filteredReports.isEmpty()) {
                     binding.layoutHomeEmpty.setVisibility(View.VISIBLE);
                     adapter.setReports(null);
@@ -293,13 +320,69 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onError(String message) {
-                if (!isAdded() || binding == null) return;
+                if (!isAdded() || binding == null || !reloadTracker.isCurrent(requestId)) return;
+                reloadTracker.finish();
                 binding.progressHome.setVisibility(View.GONE);
+                binding.progressReload.setVisibility(View.GONE);
+                binding.btnReloadReports.setVisibility(View.VISIBLE);
                 binding.tvHomeError.setText(message != null && !message.trim().isEmpty()
                         ? message : getString(R.string.home_error_default));
                 binding.layoutHomeError.setVisibility(View.VISIBLE);
             }
+
+            @Override
+            public void onAuthFailure() {
+                if (!isAdded() || binding == null || !reloadTracker.isCurrent(requestId)) return;
+                reloadTracker.finish();
+                binding.progressHome.setVisibility(View.GONE);
+                binding.progressReload.setVisibility(View.GONE);
+                binding.btnReloadReports.setVisibility(View.VISIBLE);
+                // Same session flow as sign-out: wipe account state, then land
+                // on AuthActivity with a cleared task.
+                authRepository.logout(() -> {
+                    if (!isAdded()) return;
+                    Intent intent = new Intent(requireContext(), AuthActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    requireActivity().finish();
+                });
+            }
         });
+    }
+
+    /**
+     * Client-side recency window for the FOUND_RECENTLY filter: found reports
+     * from the last 7 days. Every other filter passes the server response
+     * through untouched. Takes the clock explicitly so the window is testable;
+     * callers pass the current time. Unparseable dates fail open to the list
+     * rather than silently dropping reports.
+     */
+    static List<Report> applyClientFilter(List<Report> reports, String filter, Date now) {
+        List<Report> filtered = new ArrayList<>();
+        if (reports == null) {
+            return filtered;
+        }
+        if (!"FOUND_RECENTLY".equals(filter)) {
+            filtered.addAll(reports);
+            return filtered;
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        cal.add(Calendar.DAY_OF_YEAR, -7);
+        Date cutoff = cal.getTime();
+        for (Report r : reports) {
+            if (r != null && r.isFound()) {
+                try {
+                    Date incidentDate = com.example.lostandfound.util.DateUtils.parseIsoDate(r.getIncidentDate());
+                    if (incidentDate == null || incidentDate.after(cutoff)) {
+                        filtered.add(r);
+                    }
+                } catch (Exception e) {
+                    filtered.add(r);
+                }
+            }
+        }
+        return filtered;
     }
 
     private void refreshPosterProfiles(List<Report> reports) {

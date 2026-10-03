@@ -83,6 +83,7 @@ Pull to refresh or try a different filter.</string>
     <string name="content_description_photo">Item photo</string>
     <string name="content_description_badge">Status badge</string>
     <string name="content_description_overflow">More options</string>
+    <string name="content_description_reload_reports">Reload recent reports</string>
     <string name="browse_show_filters">Show filters</string>
     <string name="browse_hide_filters">Hide filters</string>
     <string name="browse_filters_title">Filters</string>
