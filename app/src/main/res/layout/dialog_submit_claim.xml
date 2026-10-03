@@ -1,17 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Claim / found-item response sheet.
+
+     Deliberately the same construction as dialog_report_abuse.xml so the two
+     sheets read as one family: same #181818 surface, grab handle, type scale
+     and button treatment. Construction copied from that file, comments and all
+     where the reasoning still holds.
+
+     Two differences from the reference, both deliberate:
+       - The title is white, not red. Reporting a post is a destructive act and
+         the reference uses spotify_error to signal that; responding to a report
+         is not, so red would be a false alarm.
+       - The button is the green pill rather than the danger fill, for the same
+         reason.
+     The verification-question card has no counterpart in the reference because
+     only a FOUND report carries a question; it keeps the same uppercase
+     caption treatment as the reference's field labels. Its colours follow
+     DESIGN.md directly: Silver #b3b3b3 for the muted caption (section 2/9) and
+     Border Gray #4d4d4d for the stroke. The announcement blue it replaced was
+     off-palette: DESIGN.md section 7 says the UI is achromatic and that no
+     extra brand colours may be added.
+
+     The sheet's own background is painted in SubmitClaimBottomSheet, because
+     BottomSheetDialog tints this view with the theme's android:background, which
+     resolves to white under this app's Light parent theme.
+
+     Type measured against #181818/#1F1F1F:
+       title  #FFFFFF on #181818  17.4:1    caption #B3B3B3  8.5:1
+       input  #FFFFFF on #1F1F1F  16.5:1    hint    #B3B3B3  7.9:1
+       error  #F3727F on #1F1F1F   5.9:1 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="20dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="24dp"
     android:background="@drawable/bg_bottom_sheet">
+
+    <!-- Sheet grab handle: signals drag-to-dismiss, decoration-free. -->
+    <View
+        android:layout_width="36dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/bg_sheet_handle" />
 
     <TextView
         android:id="@+id/tvClaimDialogTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit Claim / Response"
+        android:text="Claim This Found Item"
         android:textColor="@color/spotify_text"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -21,19 +61,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:text="Provide evidence or details to verify ownership."
+        android:text="Provide descriptive evidence to verify you are the rightful owner."
         android:textColor="@color/spotify_text2"
-        android:textSize="13sp" />
+        android:textSize="14sp"
+        android:lineSpacingExtra="2dp" />
 
-    <!-- Question Box (Visible if Found report has a public question) -->
+    <!-- Owner's verification question. Only a FOUND report carries one, so this
+         card is gone for the "I found this item" path. -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardDialogQuestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="18dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
-        app:strokeColor="@color/spotify_info"
+        app:strokeColor="@color/spotify_border"
         app:strokeWidth="1dp"
         app:cardBackgroundColor="@color/spotify_surface"
         android:visibility="gone">
@@ -42,32 +84,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Verification Question:"
-                android:textColor="@color/spotify_info"
+                android:text="VERIFICATION QUESTION"
+                android:textColor="@color/spotify_text2"
                 android:textSize="11sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:letterSpacing="0.08" />
 
             <TextView
                 android:id="@+id/tvDialogQuestion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Question text..."
+                android:layout_marginTop="4dp"
                 android:textColor="@color/spotify_text"
-                android:textSize="13sp" />
+                android:textSize="15sp"
+                android:lineSpacingExtra="2dp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:hint="Your Private Evidence / Description"
+        android:layout_marginTop="18dp"
+        android:hint="Your evidence"
+        app:errorEnabled="true"
         style="@style/Widget.Foundit.Spotify.TextInputLayout">
 
         <com.example.lostandfound.ui.components.FounditTextInputEditText
@@ -75,37 +122,51 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine|textCapSentences"
-            android:minLines="3" 
-            android:textColor="@color/spotify_text" />
+            android:minLines="3"
+            android:maxLength="500"
+            android:gravity="top|start"
+            android:textColor="@color/spotify_text"
+            android:textSize="15sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="14dp"
         android:text="Your response is private and only visible to the report owner."
         android:textColor="@color/spotify_text2"
-        android:textSize="11sp" />
+        android:textSize="12sp"
+        android:lineSpacingExtra="2dp" />
 
+    <!-- Validation is a distinct red voice on its own alert surface, so it is
+         not signalled by colour alone. -->
     <TextView
         android:id="@+id/tvClaimError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="14dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         android:textColor="@color/spotify_error"
-        android:textSize="12sp"
-        android:visibility="gone" />
+        android:textSize="14sp"
+        android:lineSpacingExtra="2dp"
+        android:background="@drawable/bg_alert_warning"
+        android:visibility="gone"
+        android:accessibilityLiveRegion="polite" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSubmitClaim"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="48dp"
-        android:layout_marginTop="16dp"
-        android:text="Submit Verification Response"
+        android:layout_marginTop="18dp"
+        android:text="Submit response"
         android:textAllCaps="true"
         android:letterSpacing="0.08"
-        android:textSize="13sp"
+        android:textSize="14sp"
+        android:textStyle="bold"
         style="@style/Widget.Foundit.Spotify.GreenPill" />
 
     <ProgressBar
@@ -113,7 +174,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:indeterminateTint="@color/spotify_green"
         android:visibility="gone" />
+
 </LinearLayout>
