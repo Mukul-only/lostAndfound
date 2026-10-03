@@ -118,6 +118,13 @@ public class ProfileRepository {
                         if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                             Profile updated = response.body().get(0);
                             sessionManager.saveProfile(updated);
+                            // ProfileDirectory caches every profile by id and never
+                            // refetches one it already holds, so without this the
+                            // old name/photo stayed on every feed, claim, chat and
+                            // profile row until the process restarted. The PATCH
+                            // asked for return=representation, so push the
+                            // authoritative row straight into the cache.
+                            ProfileDirectory.getInstance().put(updated);
                             callback.onSuccess(updated);
                         } else {
                             String error = "Failed to save profile.";
@@ -146,8 +153,10 @@ public class ProfileRepository {
      *  {@link SupabaseConfig#getPublicAvatarUrl} maps "" to null, so the UI falls
      *  back to the placeholder.
      *
-     *  <p>The stored object is deliberately left in place: the avatar path is a
-     *  fixed per-user key, so a later upload simply overwrites it. */
+     *  <p>The stored object is left in place. It used to be safe to do that
+     *  because the avatar path was a fixed key that a later upload overwrote;
+     *  paths are now unique per upload, so this object is genuinely orphaned and
+     *  deleting it needs a storage DELETE call that does not exist yet. */
     public void removeAvatar(DataCallback<Profile> callback) {
         String userId = sessionManager.getUserId();
         if (userId == null) {
@@ -168,6 +177,7 @@ public class ProfileRepository {
                             // Belt and braces: an empty avatar_url would not clear
                             // the cached path through saveProfile's null check.
                             sessionManager.clearAvatarPath();
+                            ProfileDirectory.getInstance().put(updated);
                             callback.onSuccess(updated);
                         } else {
                             String error = "Failed to remove photo.";
