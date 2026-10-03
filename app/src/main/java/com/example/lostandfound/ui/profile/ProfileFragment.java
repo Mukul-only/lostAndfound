@@ -133,6 +133,24 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    /**
+     * Tabs are swapped with hide()/show(), which leave the lifecycle alone, so
+     * onResume only ran on first creation and an edited photo or name never
+     * appeared here once the fragment already existed.
+     */
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) return;
+        if (binding == null) return;
+        displayUserInfo();
+        if (currentTab == TAB_POSTS) {
+            if (!postsLoading) loadPosts();
+        } else if (!claimsLoading) {
+            loadClaims();
+        }
+    }
+
     private void displayUserInfo() {
         binding.tvProfileName.setText(sessionManager.getDisplayName());
         binding.tvProfileEmail.setText(sessionManager.getUserEmail());

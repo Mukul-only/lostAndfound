@@ -70,6 +70,22 @@ public class HomeFragment extends Fragment {
         loadReports();
     }
 
+    /**
+     * MainActivity switches tabs with hide()/show(), which do NOT drive the
+     * fragment lifecycle, so onResume fires only once for the life of the
+     * fragment and the header avatar stayed stale after a profile edit. This is
+     * the documented companion to hide()/show() and fires on every show().
+     */
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            applyDarkStatusBar();
+            refreshAvatar();
+            loadReports();
+        }
+    }
+
     @Override
     public void onPause() {
         restoreLightStatusBar();
