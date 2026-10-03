@@ -31,11 +31,14 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
+      - name: Prepare web folder
+        run: touch web/.nojekyll
+
       - name: Upload web folder
         uses: actions/upload-pages-artifact@v3
         with:
           path: web
-
+        
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
