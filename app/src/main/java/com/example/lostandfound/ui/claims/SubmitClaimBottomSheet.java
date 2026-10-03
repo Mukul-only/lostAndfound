@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.claims;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,16 +8,20 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.example.lostandfound.R;
 import com.example.lostandfound.data.model.Report;
 import com.example.lostandfound.data.model.RpcResponse;
 import com.example.lostandfound.data.repository.ClaimRepository;
 import com.example.lostandfound.databinding.DialogSubmitClaimBinding;
+import com.example.lostandfound.ui.common.SheetStyling;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class SubmitClaimBottomSheet extends BottomSheetDialogFragment {
     public interface OnClaimSubmittedListener {
         void onClaimSubmitted();
     }
+
+    private static final int SHEET_ID = com.google.android.material.R.id.design_bottom_sheet;
 
     private DialogSubmitClaimBinding binding;
     private ClaimRepository claimRepository;
@@ -40,6 +45,37 @@ public class SubmitClaimBottomSheet extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DialogSubmitClaimBinding.inflate(inflater, container, false);
         return binding.getRoot();
+    }
+
+    @Override
+    public int getTheme() {
+        return R.style.ThemeOverlay_Foundit_Spotify_BottomSheetDialog;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        applyDarkSheetSurface();
+        SheetStyling.expandForKeyboard(getDialog());
+    }
+
+    /**
+     * Paints the sheet surface ourselves. Identical to ReportAbuseDialog: the
+     * theme's android:background resolves to white under this app's Light parent
+     * theme, so the sheet would render light without this.
+     */
+    private void applyDarkSheetSurface() {
+        Dialog dialog = getDialog();
+        if (dialog == null) return;
+        View sheet = dialog.findViewById(SHEET_ID);
+        if (sheet != null) {
+            if (sheet instanceof ViewGroup) {
+                ((ViewGroup) sheet).setBackgroundTintList(null);
+            }
+            // No elevation: a shadow on a sheet inside this dialog window renders
+            // against the window surface and turns the whole sheet black.
+            sheet.setBackgroundResource(R.drawable.bg_bottom_sheet);
+        }
     }
 
     @Override

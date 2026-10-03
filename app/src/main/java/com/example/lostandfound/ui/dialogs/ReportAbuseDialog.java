@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.lostandfound.R;
 import com.example.lostandfound.data.repository.ReportRepository;
+import com.example.lostandfound.ui.common.SheetStyling;
 import com.example.lostandfound.ui.common.DropdownStyling;
 import com.example.lostandfound.databinding.DialogReportAbuseBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -42,6 +43,14 @@ public class ReportAbuseDialog extends BottomSheetDialogFragment {
             // renders against the window surface and turned the whole sheet black.
             sheet.setBackgroundResource(R.drawable.bg_bottom_sheet);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Surface is painted in onCreateDialog; the expand has to wait for onStart
+        // so the sheet is attached and BottomSheetBehavior can reach it.
+        SheetStyling.expandForKeyboard(getDialog());
     }
 
     private DialogReportAbuseBinding binding;

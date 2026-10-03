@@ -493,6 +493,10 @@
          BottomSheetDialog applies from this theme. -->
     <style name="ThemeOverlay.Foundit.Spotify.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/Widget.Foundit.Spotify.BottomSheet</item>
+        <!-- Without this the dialog window ignores the keyboard and the IME
+             covers the sheet's action button. With it the window shrinks and the
+             sheet rides up; SheetStyling.expandForKeyboard keeps it expanded. -->
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
 <style name="ThemeOverlay.Foundit.Spotify.Dialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
