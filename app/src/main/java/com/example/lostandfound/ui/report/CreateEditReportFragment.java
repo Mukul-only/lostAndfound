@@ -254,7 +254,10 @@ public class CreateEditReportFragment extends Fragment {
 
         binding.btnSetMapPin.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), LocationPickerActivity.class);
-            intent.putExtra(LocationPickerActivity.EXTRA_MODE, LocationPickerActivity.MODE_PICK_FOUND_LOCATION);
+            intent.putExtra(LocationPickerActivity.EXTRA_MODE,
+                    Report.TYPE_LOST.equals(currentType)
+                            ? LocationPickerActivity.MODE_PICK_LOST_LOCATION
+                            : LocationPickerActivity.MODE_PICK_FOUND_LOCATION);
             if (selectedLatitude != null && selectedLongitude != null) {
                 intent.putExtra(LocationPickerActivity.EXTRA_INITIAL_LAT, selectedLatitude);
                 intent.putExtra(LocationPickerActivity.EXTRA_INITIAL_LNG, selectedLongitude);

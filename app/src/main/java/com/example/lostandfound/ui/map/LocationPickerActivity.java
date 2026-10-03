@@ -31,6 +31,7 @@ import java.util.Locale;
 public class LocationPickerActivity extends AppCompatActivity implements OnMapReadyCallback {
     public static final String EXTRA_MODE = "extra_mode";
     public static final String MODE_PICK_FOUND_LOCATION = "mode_pick_found";
+    public static final String MODE_PICK_LOST_LOCATION = "mode_pick_lost";
     public static final String MODE_PROPOSE_MEETING = "mode_propose_meeting";
     public static final String MODE_VIEW_LOCATION = "mode_view_location";
 
@@ -134,14 +135,20 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                 binding.etMeetingNote.setText(customNote);
             }
         } else {
-            // MODE_PICK_FOUND_LOCATION
-            binding.tvPickerTitle.setText("Pin Where Item Was Found");
+            // Location pick for a report. The labels follow the report type:
+            // a lost item was lost somewhere, a found item was found somewhere.
+            // Everything else in this branch (pin placement, campus validation,
+            // confirm/result handling) is type-agnostic and shared.
+            boolean isLostPick = MODE_PICK_LOST_LOCATION.equals(currentMode);
+            binding.tvPickerTitle.setText(isLostPick ? "Pin Where Item Was Lost" : "Pin Where Item Was Found");
             binding.tvPickerSubtitle.setVisibility(View.VISIBLE);
             binding.tvPickerSubtitle.setText("NIT Trichy Campus");
             binding.layoutSafetyNotice.setVisibility(View.VISIBLE);
-            binding.tvSafetyNoticeText.setText("Campus Safety Notice: Mark the approximate public area inside NIT Trichy where you found it. Do not pin dorm rooms or sensitive locations.");
+            binding.tvSafetyNoticeText.setText(isLostPick
+                    ? "Campus Safety Notice: Mark the approximate public area inside NIT Trichy where you lost it. Do not pin dorm rooms or sensitive locations."
+                    : "Campus Safety Notice: Mark the approximate public area inside NIT Trichy where you found it. Do not pin dorm rooms or sensitive locations.");
             binding.layoutMeetingNote.setVisibility(View.GONE);
-            binding.btnConfirmLocation.setText("Confirm Found Location");
+            binding.btnConfirmLocation.setText(isLostPick ? "Confirm Lost Location" : "Confirm Found Location");
         }
     }
 
