@@ -24,6 +24,14 @@ public class ReportRepository {
     public interface DataCallback<T> {
         void onSuccess(T data);
         void onError(String message);
+        /**
+         * A 401 that reaches a callback survived transparent token refresh, so
+         * the session is dead. Defaults to the generic error path so existing
+         * callers keep their behaviour unless they override this.
+         */
+        default void onAuthFailure() {
+            onError("Session expired. Please sign in again.");
+        }
     }
 
     private final SupabaseClient client;
@@ -54,6 +62,8 @@ public class ReportRepository {
             public void onResponse(Call<List<Report>> call, Response<List<Report>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body());
+                } else if (response.code() == 401) {
+                    callback.onAuthFailure();
                 } else {
                     callback.onError("Failed to load reports. Code: " + response.code());
                 }
