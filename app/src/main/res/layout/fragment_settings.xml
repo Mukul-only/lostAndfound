@@ -13,6 +13,7 @@
     <!-- Header: no band of its own, it sits straight on the page background,
          exactly like the Create tab heading. -->
     <LinearLayout
+        android:id="@+id/layoutSettingsHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

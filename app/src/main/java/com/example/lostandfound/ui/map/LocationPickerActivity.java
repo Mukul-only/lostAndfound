@@ -85,6 +85,8 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         binding.btnPickerBack.setOnClickListener(v -> finish());
         binding.btnCloseViewOnly.setOnClickListener(v -> finish());
 
+        applyStatusBarInset();
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
         if (mapFragment == null) {
             mapFragment = SupportMapFragment.newInstance();
@@ -346,5 +348,16 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    /** Push the top header below the status bar on Android 15+ edge-to-edge. */
+    private void applyStatusBarInset() {
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(
+                binding.layoutTopHeader, (v, insets) -> {
+            int top = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.statusBars()).top;
+            v.setPadding(v.getPaddingLeft(), top, v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
     }
 }

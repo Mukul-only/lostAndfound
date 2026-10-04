@@ -39,6 +39,7 @@ public class ChatsFragment extends Fragment {
         unreadRepository = UnreadRepository.getInstance(requireContext());
 
         setupRecyclerView();
+        setupStatusBarInset();
         // Counts come from the shared source, not a loop of this screen's own.
         unreadRepository.addListener(this::onUnreadChanged);
         loadConversations();
@@ -120,6 +121,20 @@ public class ChatsFragment extends Fragment {
                 binding.tvChatsEmpty.setText(message);
                 binding.tvChatsEmpty.setVisibility(View.VISIBLE);
             }
+        });
+    }
+
+    /** Push the top header below the status bar on Android 15+ edge-to-edge. */
+    private void setupStatusBarInset() {
+        if (binding == null) return;
+        final int basePaddingTop = binding.layoutChatsHeader.getPaddingTop();
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(
+                binding.layoutChatsHeader, (v, insets) -> {
+            int top = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.statusBars()).top;
+            v.setPadding(v.getPaddingLeft(), basePaddingTop + top,
+                    v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
         });
     }
 

@@ -185,10 +185,17 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
 
                 // Cap decode size: uploads are <=1024px and the card never
                 // renders wider than ~1080px, so decoding originals wastes memory.
+                // Signature busts the disk cache when the report's updated_at
+                // changes (e.g. photo removed), so stale images don't persist.
+                String cacheKey = report.getUpdatedAt() != null
+                        ? report.getUpdatedAt() : report.getId();
                 Glide.with(context)
                         .load(SupabaseConfig.getGlideUrl(imageUrl))
                         .placeholder(R.drawable.ic_photo)
                         .error(R.drawable.ic_photo)
+                        .signature(new com.bumptech.glide.signature.ObjectKey(cacheKey))
+                        .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .override(1080, 1080)
                         .fitCenter()
                         .listener(new RequestListener<Drawable>() {

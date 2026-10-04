@@ -157,6 +157,7 @@ public class CreateEditReportFragment extends Fragment {
         setupPhotoPicker();
         setupMapPinPicker();
         setupSubmitButton();
+        setupStatusBarInset();
 
         applyPendingType();
     }
@@ -165,6 +166,24 @@ public class CreateEditReportFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    /**
+     * Pushes the form's top content below the status bar on Android 15+
+     * edge-to-edge by adding the status bar height to the inner layout's
+     * existing top padding.
+     */
+    private void setupStatusBarInset() {
+        if (binding == null) return;
+        final int basePaddingTop = binding.layoutCreateContent.getPaddingTop();
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(
+                binding.layoutCreateContent, (v, insets) -> {
+            int top = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.statusBars()).top;
+            v.setPadding(v.getPaddingLeft(), basePaddingTop + top,
+                    v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
     }
 
     /** Restores in-memory form state across recreation (texts and scroll

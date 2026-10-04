@@ -15,6 +15,7 @@
          background: the header sits directly on the page shade instead of
          raising a lighter band above the tabs. -->
     <LinearLayout
+        android:id="@+id/layoutProfileHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

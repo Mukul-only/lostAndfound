@@ -132,6 +132,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the case where MainActivity already exists in the task and a new
+     * intent arrives (e.g. FLAG_ACTIVITY_CLEAR_TOP from AuthActivity on sign-in or
+     * sign-up). In that scenario Android skips onCreate, so we must manually switch
+     * to the Home tab and force a fresh data load so the newly-authenticated
+     * session's reports are displayed immediately.
+     */
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        // Ensure the session check is re-evaluated
+        if (!sessionManager.isLoggedIn()) {
+            startActivity(new Intent(this, AuthActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            finish();
+            return;
+        }
+        // Switch to Home and force a fresh report load so a just-logged-in user
+        // does not see stale data from the previous session.
+        showTab(R.id.nav_home);
+        HomeFragment home = (HomeFragment) findTab(R.id.nav_home);
+        if (home != null) {
+            home.forceRefresh();
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

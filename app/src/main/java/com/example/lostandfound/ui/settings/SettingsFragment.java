@@ -75,6 +75,7 @@ public class SettingsFragment extends Fragment {
 
         displayUserInfo();
         setupActions();
+        setupStatusBarInset();
         refreshProfileFromServer();
     }
 
@@ -373,6 +374,20 @@ public class SettingsFragment extends Fragment {
         super.onSaveInstanceState(outState);
         // So a photo taken before a rotation is not lost.
         avatarPicker.onSaveInstanceState(outState, "state_avatar_capture_path");
+    }
+
+    /** Push the top header below the status bar on Android 15+ edge-to-edge. */
+    private void setupStatusBarInset() {
+        if (binding == null) return;
+        final int basePaddingTop = binding.layoutSettingsHeader.getPaddingTop();
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(
+                binding.layoutSettingsHeader, (v, insets) -> {
+            int top = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.statusBars()).top;
+            v.setPadding(v.getPaddingLeft(), basePaddingTop + top,
+                    v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
     }
 
     @Override

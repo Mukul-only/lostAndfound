@@ -95,6 +95,7 @@ public class BrowseFragment extends Fragment {
         setupSearch();
         syncFilterUi();
         suppressFilterCallbacks = false;
+        setupStatusBarInset();
         loadReports();
     }
 
@@ -374,6 +375,20 @@ public class BrowseFragment extends Fragment {
             pendingScrollState = null;
             pendingScrollSignature = null;
         }
+    }
+
+    /** Push the top search/filter bar below the status bar on Android 15+ edge-to-edge. */
+    private void setupStatusBarInset() {
+        if (binding == null) return;
+        final int basePaddingTop = binding.layoutBrowseTopBar.getPaddingTop();
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(
+                binding.layoutBrowseTopBar, (v, insets) -> {
+            int top = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.statusBars()).top;
+            v.setPadding(v.getPaddingLeft(), basePaddingTop + top,
+                    v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
     }
 
     @Override

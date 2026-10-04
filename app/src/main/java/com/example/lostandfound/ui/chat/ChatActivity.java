@@ -245,8 +245,15 @@ public class ChatActivity extends AppCompatActivity implements MessageAdapter.Li
         refreshHandler.removeCallbacks(pollRunnable);
     }
 
-    /** Keeps the composer clear of the gesture bar / IME. */
+    /** Keeps the composer clear of the gesture bar / IME, and the toolbar below the status bar. */
     private void setupInsets() {
+        // Status bar → toolbar top padding
+        ViewCompat.setOnApplyWindowInsetsListener(binding.layoutChatToolbar, (v, insets) -> {
+            int top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+            v.setPadding(v.getPaddingLeft(), top, v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
+        // IME / gesture bar → composer bottom padding
         ViewCompat.setOnApplyWindowInsetsListener(binding.layoutComposer, (v, insets) -> {
             int bottom = Math.max(
                     insets.getInsets(WindowInsetsCompat.Type.ime()).bottom,

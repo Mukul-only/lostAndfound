@@ -25,6 +25,7 @@
         <!-- Top bar: identity only. Safety report sits here as a quiet dark
              circle rather than a loud filled button. -->
         <LinearLayout
+            android:id="@+id/layoutDetailToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:minHeight="56dp"

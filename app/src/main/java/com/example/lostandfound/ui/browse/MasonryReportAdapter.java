@@ -105,10 +105,17 @@ public class MasonryReportAdapter extends RecyclerView.Adapter<MasonryReportAdap
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 // Masonry tiles render at ~1/3 screen width; 720px decode cap
                 // keeps three columns smooth without visible quality loss.
+                // Signature busts the disk cache when the report's updated_at
+                // changes (e.g. photo removed), so stale images don't persist.
+                String cacheKey = report.getUpdatedAt() != null
+                        ? report.getUpdatedAt() : report.getId();
                 Glide.with(context)
                         .load(SupabaseConfig.getGlideUrl(imageUrl))
                         .placeholder(R.drawable.ic_photo)
                         .error(R.drawable.ic_photo)
+                        .signature(new com.bumptech.glide.signature.ObjectKey(cacheKey))
+                        .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .override(720, 720)
                         .fitCenter()
                         .listener(new RequestListener<Drawable>() {

@@ -253,6 +253,17 @@ public class HomeFragment extends Fragment {
     }
 
     /**
+     * Forces a fresh data load regardless of whether a request is already in
+     * flight. Called by MainActivity when the activity is reused via onNewIntent
+     * (e.g. after sign-in or sign-up redirects back to an already-alive instance),
+     * so the newly authenticated session's reports replace any stale data
+     * immediately without requiring an app restart.
+     */
+    public void forceRefresh() {
+        fetchReports(true, false);
+    }
+
+    /**
      * Manual reload from the heading button. A tap while a load is in flight
      * is dropped, never queued behind it.
      */

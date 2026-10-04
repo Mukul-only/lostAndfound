@@ -33,6 +33,23 @@ public class AuthActivity extends AppCompatActivity {
 
         setupTabs();
         setupSubmitButton();
+        applyStatusBarInset();
+    }
+
+    /**
+     * Pushes the auth form below the status bar on Android 15+ edge-to-edge
+     * by adding the status bar height to the inner layout's existing top padding.
+     */
+    private void applyStatusBarInset() {
+        final int basePaddingTop = binding.layoutAuthContent.getPaddingTop();
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(
+                binding.layoutAuthContent, (v, insets) -> {
+            int top = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.statusBars()).top;
+            v.setPadding(v.getPaddingLeft(), basePaddingTop + top,
+                    v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
     }
 
     private void setupTabs() {
@@ -135,7 +152,12 @@ public class AuthActivity extends AppCompatActivity {
 
     private void navigateToMain() {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        // FLAG_ACTIVITY_CLEAR_TASK destroys any existing MainActivity and creates a fresh one,
+        // which is required so HomeFragment loads reports with the new session's token.
+        // FLAG_ACTIVITY_CLEAR_TOP must NOT be combined here: it would reuse an existing
+        // MainActivity instance (calling onNewIntent instead of onCreate) and leave the
+        // old HomeFragment in place without triggering a fresh data load.
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

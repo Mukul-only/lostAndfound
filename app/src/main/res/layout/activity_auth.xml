@@ -7,6 +7,7 @@
     android:background="@color/spotify_bg">
 
     <LinearLayout
+        android:id="@+id/layoutAuthContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

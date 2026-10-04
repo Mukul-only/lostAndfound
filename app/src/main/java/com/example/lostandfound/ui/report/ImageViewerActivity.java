@@ -51,6 +51,8 @@ public class ImageViewerActivity extends AppCompatActivity {
         binding.btnViewerBack.setOnClickListener(v -> finish());
         binding.ivFullImage.setScaleType(android.widget.ImageView.ScaleType.MATRIX);
 
+        applyStatusBarInset();
+
         scaleDetector = new ScaleGestureDetector(this, new ScaleListener());
         gestureDetector = new GestureDetector(this, new GestureListener());
 
@@ -190,5 +192,22 @@ public class ImageViewerActivity extends AppCompatActivity {
             }
             return true;
         }
+    }
+
+    /**
+     * Shifts the floating back button below the status bar on Android 15+
+     * edge-to-edge by adding the status bar height to its existing top margin.
+     */
+    private void applyStatusBarInset() {
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(
+                binding.btnViewerBack, (v, insets) -> {
+            int top = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.statusBars()).top;
+            android.view.ViewGroup.MarginLayoutParams lp =
+                    (android.view.ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            lp.topMargin = top + (int) (16 * getResources().getDisplayMetrics().density);
+            v.setLayoutParams(lp);
+            return insets;
+        });
     }
 }

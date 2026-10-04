@@ -74,10 +74,23 @@ public class ReportDetailActivity extends AppCompatActivity {
             dialog.show(getSupportFragmentManager(), "report_abuse");
         });
 
+        applyStatusBarInset();
+
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapDetailView);
         if (mapFragment != null) mapFragment.onCreate(savedInstanceState);
         loadReportDetails();
+    }
+
+    /** Push the top toolbar below the status bar on Android 15+ edge-to-edge. */
+    private void applyStatusBarInset() {
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(
+                binding.layoutDetailToolbar, (v, insets) -> {
+            int top = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.statusBars()).top;
+            v.setPadding(v.getPaddingLeft(), top, v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
     }
 
     @Override

@@ -36,8 +36,20 @@ public class ClaimsReviewActivity extends AppCompatActivity {
 
         binding.btnClaimsBack.setOnClickListener(v -> finish());
 
+        applyStatusBarInset();
         setupRecyclerView();
         loadClaims();
+    }
+
+    /** Push the top toolbar below the status bar on Android 15+ edge-to-edge. */
+    private void applyStatusBarInset() {
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(
+                binding.layoutClaimsToolbar, (v, insets) -> {
+            int top = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.statusBars()).top;
+            v.setPadding(v.getPaddingLeft(), top, v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
     }
 
     private void setupRecyclerView() {

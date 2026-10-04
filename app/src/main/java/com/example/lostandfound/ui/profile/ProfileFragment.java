@@ -102,6 +102,7 @@ public class ProfileFragment extends Fragment {
         setupAdapters();
         setupTabs();
         setupActions();
+        setupStatusBarInset();
         refreshProfileFromServer();
 
         applyTab(currentTab);
@@ -469,6 +470,20 @@ public class ProfileFragment extends Fragment {
             if (isAdded() && binding != null) {
                 claimAdapter.notifyDataSetChanged();
             }
+        });
+    }
+
+    /** Push the top back-button row below the status bar on Android 15+ edge-to-edge. */
+    private void setupStatusBarInset() {
+        if (binding == null) return;
+        final int basePaddingTop = binding.layoutProfileHeader.getPaddingTop();
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(
+                binding.layoutProfileHeader, (v, insets) -> {
+            int top = insets.getInsets(
+                    androidx.core.view.WindowInsetsCompat.Type.statusBars()).top;
+            v.setPadding(v.getPaddingLeft(), basePaddingTop + top,
+                    v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
         });
     }
 

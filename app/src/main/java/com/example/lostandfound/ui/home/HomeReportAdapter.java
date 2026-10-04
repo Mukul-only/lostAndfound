@@ -168,20 +168,33 @@ public class HomeReportAdapter extends RecyclerView.Adapter<HomeReportAdapter.Re
             binding.tvStatusBadge.setTextColor(statusColor(context, report.getStatus()));
 
             String imageUrl = SupabaseConfig.getPublicImageUrl(report.getImageUrl());
+            // Always clear first so a recycled ViewHolder never shows a stale
+            // image from a previous report while the new load is in flight.
+            Glide.with(context).clear(binding.ivItemImage);
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 setFullPhotoMode();
-                Glide.with(context).clear(binding.ivItemImage);
                 binding.ivItemImage.setImageTintList(null);
                 binding.ivItemImage.setVisibility(View.VISIBLE);
+                // Keying the cache on updated_at busts the disk cache when the
+                // report row changes (e.g. photo removed / replaced), so a
+                // deleted photo stops appearing even without an app restart.
+                String cacheKey = report.getUpdatedAt() != null
+                        ? report.getUpdatedAt() : report.getId();
                 Glide.with(context)
                         .load(SupabaseConfig.getGlideUrl(imageUrl))
                         .placeholder(R.drawable.ic_photo)
                         .error(R.drawable.ic_photo)
+                        .signature(new com.bumptech.glide.signature.ObjectKey(cacheKey))
+                        .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .override(1080, 1080)
                         .fitCenter()
                         .listener(new RequestListener<Drawable>() {
                             @Override
                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                // File was deleted from storage — fall back to
+                                // the same placeholder layout as no-image reports.
+                                setPlaceholderMode();
                                 binding.ivItemImage.setImageTintList(ColorStateList.valueOf(
                                         ContextCompat.getColor(context, R.color.spotify_text2)));
                                 return false;
@@ -197,7 +210,6 @@ public class HomeReportAdapter extends RecyclerView.Adapter<HomeReportAdapter.Re
             } else {
                 // Missing-image state: fixed compact tile, silver glyph on #1f1f1f.
                 setPlaceholderMode();
-                Glide.with(context).clear(binding.ivItemImage);
                 binding.ivItemImage.setImageTintList(ColorStateList.valueOf(
                         ContextCompat.getColor(context, R.color.spotify_text2)));
                 binding.ivItemImage.setImageResource(R.drawable.ic_photo);
